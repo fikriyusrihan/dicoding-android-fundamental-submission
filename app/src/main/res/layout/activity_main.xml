@@ -10,6 +10,7 @@
         android:id="@+id/iv_github_logo"
         style="@style/ImageLogo"
         app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/github_logo"
         app:layout_constraintTop_toTopOf="parent" />
 
 
