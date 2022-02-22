@@ -48,6 +48,12 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * Parsing User data to it's view
+     *
+     * @param user  User dataclass
+     * @return Unit
+     */
     private fun parseUserDetail(user: User) {
         binding.tvName.text = user.name
         binding.tvUsername.text = user.username
