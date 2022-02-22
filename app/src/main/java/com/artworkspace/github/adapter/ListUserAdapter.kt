@@ -9,6 +9,19 @@ import com.artworkspace.github.model.User
 
 class ListUserAdapter(private val listUser: ArrayList<User>) :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
+
+    private lateinit var onItemClickCallback: OnItemClickCallback
+
+    /**
+     * Set an item click callback
+     *
+     * @param onItemClickCallback   object that implements onItemClickCallback
+     * @return Unit
+     */
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
     class ListViewHolder(var binding: UserCardBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(
@@ -26,12 +39,14 @@ class ListUserAdapter(private val listUser: ArrayList<User>) :
         holder.binding.cardTvCompany.text = user.company
         holder.binding.cardImageProfile.setImageResource(user.avatar)
 
-        holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context, user.name, Toast.LENGTH_SHORT).show()
-        }
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(user) }
     }
 
     override fun getItemCount(): Int {
         return listUser.size
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(user: User)
     }
 }
