@@ -1,11 +1,23 @@
 <resources>
     <string name="app_name">GitHub</string>
-    <string name="home">Home</string>
     <string name="user_name">User Name</string>
     <string name="name">Name</string>
     <string name="company">Company</string>
     <string name="company_icon">Company Icon</string>
     <string name="github_logo">GitHub Logo</string>
+    <string name="back_icon">Back Icon</string>
+    <string name="profile">Profile</string>
+    <string name="_24">24</string>
+    <string name="repositories">Repositories</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="location">Location</string>
+    <string name="open_on_github">Open on GitHub</string>
+    <string name="my_username">fikriyusrihan</string>
+    <string name="my_name">Fikri Yusrihan</string>
+    <string name="my_location">Jakarta, Indonesia</string>
+    <string name="_50">50</string>
+    <string name="my_company">Diponegoro University</string>
 
     <string-array name="username">
         <item>JakeWharton</item>

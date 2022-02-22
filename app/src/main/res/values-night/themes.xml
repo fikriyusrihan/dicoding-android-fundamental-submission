@@ -2,16 +2,25 @@
     <!-- Base application theme. -->
     <style name="Theme.GitHub" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/iron_200</item>
+        <item name="colorPrimaryVariant">@color/iron_500</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondary">@color/desert_storm_200</item>
+        <item name="colorSecondaryVariant">@color/desert_storm_500</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
+        <!-- Status & Navigation bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue_200</item>
+        <item name="android:navigationBarColor">@color/dark_blue_200</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/dark_blue_200</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_bg_dark</item>
+        <!-- Status & Navigation bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue_200</item>
+        <item name="android:navigationBarColor">@color/dark_blue_200</item>
     </style>
 
     <style name="ImageLogo">
@@ -21,21 +30,28 @@
         <item name="android:layout_marginStart">24dp</item>
         <item name="android:layout_marginTop">24dp</item>
         <item name="android:scaleType">centerCrop</item>
+        <item name="contentDescription">@string/github_logo</item>
     </style>
 
     <style name="TextTitle">
-        <item name="android:layout_marginStart">24dp</item>
-        <item name="android:layout_marginTop">24dp</item>
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="TextCard">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="TextTitle.Profile">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextCard.Title">
+    <style name="Stats">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:text">@string/_24</item>
+    </style>
+
+    <style name="TextCard">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
     </style>

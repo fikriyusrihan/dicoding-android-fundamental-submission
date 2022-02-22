@@ -1,54 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="4dp"
     android:paddingHorizontal="24dp"
-    android:orientation="horizontal"
-    android:paddingVertical="8dp"
-    android:weightSum="1">
+    android:paddingVertical="8dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/card_image_profile"
         android:layout_width="54dp"
         android:layout_height="54dp"
-        android:src="@drawable/user1" />
+        android:src="@drawable/user1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/card_tv_name"
+        style="@style/TextCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="24dp"
-        android:orientation="vertical">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        tools:text="@string/name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/card_image_profile"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/card_tv_name"
-            style="@style/TextCard.Title"
-            android:text="@string/name" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/company_icon"
-                android:src="@drawable/ic_baseline_apartment_24" />
-
-            <TextView
-                android:id="@+id/card_tv_company"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/company" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/card_tv_company"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:drawablePadding="8dp"
+        tools:text="@string/company"
+        app:drawableStartCompat="@drawable/ic_baseline_apartment_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/card_image_profile"
+        app:layout_constraintTop_toBottomOf="@+id/card_tv_name" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
