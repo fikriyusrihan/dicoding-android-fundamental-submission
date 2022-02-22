@@ -1,9 +1,9 @@
 package com.artworkspace.github.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -75,7 +75,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_profile -> {
-                Toast.makeText(this, "Hello, this is me", Toast.LENGTH_SHORT).show()
+                Intent(this, DetailUserActivity::class.java).also {
+                    startActivity(it)
+                }
             }
         }
     }

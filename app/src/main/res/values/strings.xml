@@ -6,6 +6,15 @@
     <string name="company">Company</string>
     <string name="company_icon">Company Icon</string>
     <string name="github_logo">GitHub Logo</string>
+    <string name="back_icon">Back Icon</string>
+    <string name="back">Back</string>
+    <string name="profile">Profile</string>
+    <string name="_24">24</string>
+    <string name="repositories">Repositories</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="location">Location</string>
+    <string name="open_on_github">Open on GitHub</string>
 
     <string-array name="username">
         <item>JakeWharton</item>
