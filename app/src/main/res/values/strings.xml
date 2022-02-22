@@ -5,6 +5,7 @@
     <string name="name">Name</string>
     <string name="company">Company</string>
     <string name="company_icon">Company Icon</string>
+    <string name="github_logo">GitHub Logo</string>
 
     <string-array name="username">
         <item>JakeWharton</item>

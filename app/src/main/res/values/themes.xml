@@ -15,6 +15,16 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="ImageLogo">
+        <item name="android:src">@drawable/github_logo_black</item>
+        <item name="android:layout_width">82dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="contentDescription">@string/github_logo</item>
+    </style>
+
     <style name="TextTitle">
         <item name="android:layout_marginStart">24dp</item>
         <item name="android:layout_marginTop">24dp</item>
