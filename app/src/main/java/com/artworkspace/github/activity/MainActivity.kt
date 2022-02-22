@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.artworkspace.github.R
+import com.artworkspace.github.activity.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.model.User
@@ -75,7 +76,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.iv_profile -> {
-                Intent(this, DetailUserActivity::class.java).also {
+
+                val profile = User(
+                    getString(R.string.my_username),
+                    getString(R.string.my_name),
+                    getString(R.string.my_location),
+                    getString(R.string._50).toInt(),
+                    getString(R.string.my_company),
+                    getString(R.string._24).toInt(),
+                    getString(R.string._24).toInt(),
+                    R.drawable.user11
+                )
+
+                Intent(this, DetailUserActivity::class.java).apply {
+                    putExtra(EXTRA_DETAIL, profile)
+                }.also {
                     startActivity(it)
                 }
             }

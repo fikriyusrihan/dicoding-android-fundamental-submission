@@ -15,6 +15,11 @@
     <string name="followers">Followers</string>
     <string name="location">Location</string>
     <string name="open_on_github">Open on GitHub</string>
+    <string name="my_username">fikriyusrihan</string>
+    <string name="my_name">Fikri Yusrihan</string>
+    <string name="my_location">Jakarta, Indonesia</string>
+    <string name="_50">50</string>
+    <string name="my_company">Diponegoro University</string>
 
     <string-array name="username">
         <item>JakeWharton</item>
