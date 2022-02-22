@@ -68,14 +68,14 @@
                     style="@style/TextTitle.Profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/name" />
+                    tools:text="@string/name" />
 
                 <TextView
                     android:id="@+id/tv_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="@string/user_name" />
+                    tools:text="@string/user_name" />
 
             </LinearLayout>
 
@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:drawablePadding="8dp"
-            android:text="@string/company"
+            tools:text="@string/company"
             app:drawableStartCompat="@drawable/ic_baseline_apartment_16"
             app:flow_verticalAlign="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -174,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:drawablePadding="8dp"
-            android:text="@string/location"
+            tools:text="@string/location"
             app:drawableStartCompat="@drawable/ic_baseline_location_on_16"
             app:flow_verticalAlign="center"
             app:layout_constraintEnd_toEndOf="parent"
