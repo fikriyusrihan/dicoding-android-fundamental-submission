@@ -1,6 +1,9 @@
 package com.artworkspace.github.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +12,7 @@ import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.model.User
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var rvUsers: RecyclerView
@@ -27,9 +30,12 @@ class MainActivity : AppCompatActivity() {
 
         list.addAll(listUsers)
         showRecyclerView()
+        
+        binding.ivProfile.setOnClickListener(this)
     }
 
     private val listUsers: ArrayList<User>
+        @SuppressLint("Recycle")
         get() {
             val dataUsername = resources.getStringArray(R.array.username)
             val dataName = resources.getStringArray(R.array.name)
@@ -64,5 +70,13 @@ class MainActivity : AppCompatActivity() {
 
         val listUserAdapter = ListUserAdapter(list)
         rvUsers.adapter = listUserAdapter
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.iv_profile -> {
+                Toast.makeText(this, "Hello, this is me", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
