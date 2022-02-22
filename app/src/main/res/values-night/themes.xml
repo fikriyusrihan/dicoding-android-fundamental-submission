@@ -9,9 +9,18 @@
         <item name="colorSecondary">@color/desert_storm_200</item>
         <item name="colorSecondaryVariant">@color/desert_storm_500</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
+        <!-- Status & Navigation bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue_200</item>
+        <item name="android:navigationBarColor">@color/dark_blue_200</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/dark_blue_200</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_bg_dark</item>
+        <!-- Status & Navigation bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue_200</item>
+        <item name="android:navigationBarColor">@color/dark_blue_200</item>
     </style>
 
     <style name="ImageLogo">
