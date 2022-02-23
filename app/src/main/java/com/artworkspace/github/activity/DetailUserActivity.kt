@@ -8,12 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.artworkspace.github.R
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.model.User
+import com.bumptech.glide.Glide
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
-
-    companion object {
-        const val EXTRA_DETAIL = "extra_detail"
-    }
 
     private lateinit var binding: ActivityDetailUserBinding
     private lateinit var user: User
@@ -55,13 +52,24 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
      * @return Unit
      */
     private fun parseUserDetail(user: User) {
-        binding.tvName.text = user.name
-        binding.tvUsername.text = user.username
-        binding.tvRepositories.text = user.repository.toString()
-        binding.tvFollowers.text = user.follower.toString()
-        binding.tvFollowing.text = user.following.toString()
-        binding.tvCompany.text = user.company
-        binding.tvLocation.text = user.location
-        binding.ivAvatar.setImageResource(user.avatar)
+        binding.apply {
+            tvName.text = user.name
+            tvUsername.text = user.username
+            tvRepositories.text = user.repository.toString()
+            tvFollowers.text = user.follower.toString()
+            tvFollowing.text = user.following.toString()
+            tvCompany.text = user.company
+            tvLocation.text = user.location
+
+            Glide
+                .with(this@DetailUserActivity)
+                .load(user.avatar)
+                .placeholder(R.drawable.profile_placeholder)
+                .into(ivAvatar)
+        }
+    }
+
+    companion object {
+        const val EXTRA_DETAIL = "extra_detail"
     }
 }
