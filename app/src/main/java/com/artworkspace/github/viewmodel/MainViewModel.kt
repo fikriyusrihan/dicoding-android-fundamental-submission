@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.artworkspace.github.Utils.Companion.TOKEN
 import com.artworkspace.github.model.ResponseSearch
 import com.artworkspace.github.model.SimpleUser
 import com.artworkspace.github.repository.ApiConfig
@@ -56,7 +57,6 @@ class MainViewModel: ViewModel() {
 
     companion object {
         private val TAG = MainViewModel::class.java.simpleName
-        private const val TOKEN = "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"
     }
 
 }
