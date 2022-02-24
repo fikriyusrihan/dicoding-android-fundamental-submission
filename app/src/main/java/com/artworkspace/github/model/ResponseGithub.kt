@@ -11,15 +11,15 @@ data class ResponseSearch(
 	val incompleteResults: Boolean,
 
 	@field:SerializedName("items")
-	val items: List<SimpleUser>
+	val items: ArrayList<SimpleUser>
 )
 
 data class ResponseFollowers(
-	val responseUser: List<SimpleUser>
+	val responseUser: ArrayList<SimpleUser>
 )
 
 data class ResponseFollowing(
-	val responseUser: List<SimpleUser>
+	val responseUser: ArrayList<SimpleUser>
 )
 
 data class NewUser(

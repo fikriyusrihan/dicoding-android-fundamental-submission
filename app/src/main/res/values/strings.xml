@@ -20,4 +20,5 @@
     <string name="profile">Profile</string>
     <string name="search">Search</string>
     <string name="github_username">GitHub Username</string>
+    <string name="showing_results">Showing %d results</string>
 </resources>

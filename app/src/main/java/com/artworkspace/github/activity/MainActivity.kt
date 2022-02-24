@@ -4,6 +4,7 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var rvUsers: RecyclerView
 
-    private val list = ArrayList<SimpleUser>()
     private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +36,13 @@ class MainActivity : AppCompatActivity() {
         rvUsers = binding.rvUsers
         rvUsers.setHasFixedSize(true)
 
-        showRecyclerView()
+        mainViewModel.simpleUsers.observe(this) {
+            showSearchingResult(it)
+        }
+
+        mainViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -51,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             queryHint = getString(R.string.github_username)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    Toast.makeText(this@MainActivity, "$query", Toast.LENGTH_SHORT).show()
+                    mainViewModel.findUser(query ?: "")
                     clearFocus()
                     return true
                 }
@@ -62,18 +68,30 @@ class MainActivity : AppCompatActivity() {
 
             })
         }
-
         return true
+    }
+
+    /**
+     * Determine loading indicator is visible or not
+     *
+     * @param isLoading Loading state
+     * @return Unit
+     */
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) binding.pbLoading.visibility = View.VISIBLE
+        else binding.pbLoading.visibility = View.GONE
     }
 
 
     /**
-     * Setting up layout manager, adapter, and onClickItemCallback
+     * Showing up result, setup layout manager, adapter, and onClickItemCallback
      */
-    private fun showRecyclerView() {
+    private fun showSearchingResult(user: ArrayList<SimpleUser>) {
+        binding.tvResultCount.text = getString(R.string.showing_results, user.size)
+
         rvUsers.layoutManager = LinearLayoutManager(this)
 
-        val listUserAdapter = ListUserAdapter(list)
+        val listUserAdapter = ListUserAdapter(user)
         rvUsers.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
@@ -92,13 +110,6 @@ class MainActivity : AppCompatActivity() {
      * @return Unit
      */
     private fun goToDetailUser(user: SimpleUser) {
-
-//        Intent to Detail User
-
-//        Intent(this, DetailUserActivity::class.java).apply {
-//            putExtra(EXTRA_DETAIL, user)
-//        }.also {
-//            startActivity(it)
-//        }
+        Toast.makeText(this, user.login, Toast.LENGTH_SHORT).show()
     }
 }
