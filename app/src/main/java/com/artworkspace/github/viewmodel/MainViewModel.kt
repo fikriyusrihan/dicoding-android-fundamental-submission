@@ -40,11 +40,9 @@ class MainViewModel: ViewModel() {
                     response: Response<ResponseSearch>
                 ) {
                     _isLoading.value = false
-                    if (response.isSuccessful) {
-                        _simpleUsers.value = response.body()?.items
-                    } else {
-                        Log.e(TAG, response.message())
-                    }
+                    if (response.isSuccessful) _simpleUsers.value = response.body()?.items
+                    else Log.e(TAG, response.message())
+
                 }
 
                 override fun onFailure(call: Call<ResponseSearch>, t: Throwable) {

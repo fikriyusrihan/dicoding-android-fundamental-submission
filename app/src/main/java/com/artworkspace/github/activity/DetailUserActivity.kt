@@ -4,16 +4,22 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.artworkspace.github.R
+import com.artworkspace.github.Utils.Companion.setAndVisible
+import com.artworkspace.github.Utils.Companion.setImageGlide
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.model.User
-import com.bumptech.glide.Glide
+import com.artworkspace.github.viewmodel.DetailViewModel
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityDetailUserBinding
+    private lateinit var username: String
     private lateinit var user: User
+
+    private val detailViewModel by viewModels<DetailViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +34,17 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             title = getString(R.string.profile)
         }
 
-        user = intent.extras?.get(EXTRA_DETAIL) as User
-        parseUserDetail(user)
+        username = intent.extras?.get(EXTRA_DETAIL) as String
+        detailViewModel.getUserDetail(username)
+
+        detailViewModel.user.observe(this) {
+            user = it
+            parseUserDetail(user)
+        }
+
+        detailViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
 
         binding.btnOpen.setOnClickListener(this)
     }
@@ -42,13 +57,22 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_open -> {
-                val url = "https://www.github.com/${user.username}"
                 Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(url)
+                    data = Uri.parse(user.htmlUrl)
                 }.also {
                     startActivity(it)
                 }
             }
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.pbLoading.visibility = View.VISIBLE
+            binding.scContentContainer.visibility = View.GONE
+        } else {
+            binding.pbLoading.visibility = View.GONE
+            binding.scContentContainer.visibility = View.VISIBLE
         }
     }
 
@@ -61,18 +85,17 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private fun parseUserDetail(user: User) {
         binding.apply {
             tvName.text = user.name
-            tvUsername.text = user.username
-            tvRepositories.text = user.repository.toString()
-            tvFollowers.text = user.follower.toString()
+            tvUsername.text = user.login
+            tvRepositories.text = user.publicRepos.toString()
+            tvFollowers.text = user.followers.toString()
             tvFollowing.text = user.following.toString()
-            tvCompany.text = user.company
-            tvLocation.text = user.location
 
-            Glide
-                .with(this@DetailUserActivity)
-                .load(user.avatar)
-                .placeholder(R.drawable.profile_placeholder)
-                .into(ivAvatar)
+            tvBio.setAndVisible(user.bio)
+            tvCompany.setAndVisible(user.company)
+            tvLocation.setAndVisible(user.location)
+            tvBlog.setAndVisible(user.blog)
+
+            ivAvatar.setImageGlide(this@DetailUserActivity, user.avatarUrl)
         }
     }
 

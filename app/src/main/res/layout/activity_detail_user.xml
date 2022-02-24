@@ -13,7 +13,15 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorOnPrimary" />
 
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="gone" />
+
     <ScrollView
+        android:id="@+id/sc_content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -138,30 +146,56 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_company"
+                android:id="@+id/tv_bio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:drawablePadding="8dp"
-                app:drawableStartCompat="@drawable/ic_baseline_apartment_16"
-                app:flow_verticalAlign="center"
+                android:visibility="invisible"
+                app:drawableStartCompat="@drawable/ic_baseline_person_16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+                tools:text="@string/bio_dummy" />
+
+            <TextView
+                android:id="@+id/tv_company"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:drawablePadding="8dp"
+                app:drawableStartCompat="@drawable/ic_baseline_apartment_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_bio"
                 tools:text="@string/company" />
 
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:drawablePadding="8dp"
                 app:drawableStartCompat="@drawable/ic_baseline_location_on_16"
-                app:flow_verticalAlign="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_company"
                 tools:text="@string/location" />
+
+            <TextView
+                android:id="@+id/tv_blog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawablePadding="8dp"
+                android:visibility="gone"
+                app:drawableStartCompat="@drawable/ic_baseline_blog_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_location"
+                tools:text="@string/site_dummy" />
 
             <Button
                 android:id="@+id/btn_open"
@@ -171,7 +205,7 @@
                 android:text="@string/open_on_github"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_location" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_blog" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
