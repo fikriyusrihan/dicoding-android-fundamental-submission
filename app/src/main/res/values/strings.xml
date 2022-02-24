@@ -18,6 +18,8 @@
     <string name="_50">50</string>
     <string name="my_company">Diponegoro University</string>
     <string name="profile">Profile</string>
+    <string name="search">Search</string>
+    <string name="github_username">GitHub Username</string>
 
     <string-array name="username">
         <item>JakeWharton</item>

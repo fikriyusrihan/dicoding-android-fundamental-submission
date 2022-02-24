@@ -1,9 +1,15 @@
 package com.artworkspace.github.activity
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.artworkspace.github.R
@@ -11,6 +17,7 @@ import com.artworkspace.github.activity.DetailUserActivity.Companion.EXTRA_DETAI
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.model.User
+import com.artworkspace.github.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rvUsers: RecyclerView
 
     private val list = ArrayList<User>()
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +43,32 @@ class MainActivity : AppCompatActivity() {
         showRecyclerView()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.search_menu, menu)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+
+        searchView.apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            queryHint = getString(R.string.github_username)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    Toast.makeText(this@MainActivity, "$query", Toast.LENGTH_SHORT).show()
+                    clearFocus()
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+        }
+
+        return true
+    }
 
     private val listUsers: ArrayList<User>
         @SuppressLint("Recycle")
