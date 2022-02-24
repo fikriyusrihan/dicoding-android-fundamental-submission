@@ -22,7 +22,7 @@ data class ResponseFollowing(
 	val responseUser: List<SimpleUser>
 )
 
-data class User2(
+data class NewUser(
 
 	@field:SerializedName("twitter_username")
 	val twitterUsername: String,

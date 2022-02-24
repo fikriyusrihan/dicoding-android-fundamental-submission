@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.artworkspace.github.R
 import com.artworkspace.github.databinding.UserCardBinding
-import com.artworkspace.github.model.User
+import com.artworkspace.github.model.SimpleUser
 import com.bumptech.glide.Glide
 
-class ListUserAdapter(private val listUser: ArrayList<User>) :
+class ListUserAdapter(private val listUser: ArrayList<SimpleUser>) :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
@@ -37,12 +37,11 @@ class ListUserAdapter(private val listUser: ArrayList<User>) :
         val user = listUser[position]
 
         holder.binding.apply {
-            cardTvName.text = user.name
-            cardTvCompany.text = user.company
+            cardTvUsername.text = user.login
 
             Glide
                 .with(holder.itemView.context)
-                .load(user.avatar)
+                .load(user.avatarUrl)
                 .placeholder(R.drawable.profile_placeholder)
                 .into(cardImageProfile)
         }
@@ -55,6 +54,6 @@ class ListUserAdapter(private val listUser: ArrayList<User>) :
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(user: User)
+        fun onItemClicked(user: SimpleUser)
     }
 }

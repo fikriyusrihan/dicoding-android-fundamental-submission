@@ -10,36 +10,23 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/card_image_profile"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:src="@drawable/user1"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        tools:src="@drawable/dummy_profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/card_tv_name"
+        android:id="@+id/card_tv_username"
         style="@style/TextCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        tools:text="@string/name"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/card_image_profile"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/card_tv_company"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:drawablePadding="8dp"
-        tools:text="@string/company"
-        app:drawableStartCompat="@drawable/ic_baseline_apartment_16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/card_image_profile"
-        app:layout_constraintTop_toBottomOf="@+id/card_tv_name" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/user_name" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
