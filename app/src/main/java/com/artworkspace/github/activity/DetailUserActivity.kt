@@ -21,19 +21,26 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarDetail)
+        supportActionBar?.apply {
+            setDisplayShowHomeEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            title = getString(R.string.profile)
+        }
+
         user = intent.extras?.get(EXTRA_DETAIL) as User
         parseUserDetail(user)
 
-        binding.btnBack.setOnClickListener(this)
         binding.btnOpen.setOnClickListener(this)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_back -> {
-                finish()
-            }
-
             R.id.btn_open -> {
                 val url = "https://www.github.com/${user.username}"
                 Intent(Intent.ACTION_VIEW).apply {

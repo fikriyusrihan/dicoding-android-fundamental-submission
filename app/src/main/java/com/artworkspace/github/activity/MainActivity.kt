@@ -1,24 +1,28 @@
 package com.artworkspace.github.activity
 
-import android.annotation.SuppressLint
-import android.content.Intent
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.artworkspace.github.R
-import com.artworkspace.github.activity.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.databinding.ActivityMainBinding
-import com.artworkspace.github.model.User
+import com.artworkspace.github.model.SimpleUser
+import com.artworkspace.github.viewmodel.MainViewModel
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var rvUsers: RecyclerView
 
-    private val list = ArrayList<User>()
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,84 +30,72 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarHome)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         rvUsers = binding.rvUsers
         rvUsers.setHasFixedSize(true)
 
-        list.addAll(listUsers)
-        showRecyclerView()
-        
-        binding.ivProfile.setOnClickListener(this)
+        mainViewModel.simpleUsers.observe(this) {
+            showSearchingResult(it)
+        }
+
+        mainViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.search_menu, menu)
 
-    private val listUsers: ArrayList<User>
-        @SuppressLint("Recycle")
-        get() {
-            val dataUsername = resources.getStringArray(R.array.username)
-            val dataName = resources.getStringArray(R.array.name)
-            val dataLocation = resources.getStringArray(R.array.location)
-            val dataRepository = resources.getStringArray(R.array.repository)
-            val dataCompany = resources.getStringArray(R.array.company)
-            val dataFollowers = resources.getStringArray(R.array.followers)
-            val dataFollowing = resources.getStringArray(R.array.following)
-            val dataAvatar = resources.obtainTypedArray(R.array.avatar)
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
 
-            val listUsers = ArrayList<User>()
-
-            for (i in dataUsername.indices) {
-                val user = User(
-                    dataUsername[i],
-                    dataName[i],
-                    dataLocation[i],
-                    dataRepository[i].toInt(),
-                    dataCompany[i],
-                    dataFollowers[i].toInt(),
-                    dataFollowing[i].toInt(),
-                    dataAvatar.getResourceId(i, -1)
-                )
-                listUsers.add(user)
-            }
-
-            return listUsers
-        }
-
-
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.iv_profile -> {
-
-                val profile = User(
-                    getString(R.string.my_username),
-                    getString(R.string.my_name),
-                    getString(R.string.my_location),
-                    getString(R.string._50).toInt(),
-                    getString(R.string.my_company),
-                    getString(R.string._24).toInt(),
-                    getString(R.string._24).toInt(),
-                    R.drawable.user11
-                )
-
-                Intent(this, DetailUserActivity::class.java).apply {
-                    putExtra(EXTRA_DETAIL, profile)
-                }.also {
-                    startActivity(it)
+        searchView.apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            queryHint = getString(R.string.github_username)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    mainViewModel.findUser(query ?: "")
+                    clearFocus()
+                    return true
                 }
-            }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
         }
+        return true
+    }
+
+    /**
+     * Determine loading indicator is visible or not
+     *
+     * @param isLoading Loading state
+     * @return Unit
+     */
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) binding.pbLoading.visibility = View.VISIBLE
+        else binding.pbLoading.visibility = View.GONE
     }
 
 
     /**
-     * Setting up layout manager, adapter, and onClickItemCallback
+     * Showing up result, setup layout manager, adapter, and onClickItemCallback
      */
-    private fun showRecyclerView() {
+    private fun showSearchingResult(user: ArrayList<SimpleUser>) {
+        binding.tvResultCount.text = getString(R.string.showing_results, user.size)
+
         rvUsers.layoutManager = LinearLayoutManager(this)
 
-        val listUserAdapter = ListUserAdapter(list)
+        val listUserAdapter = ListUserAdapter(user)
         rvUsers.adapter = listUserAdapter
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(user: User) {
+            override fun onItemClicked(user: SimpleUser) {
                 goToDetailUser(user)
             }
 
@@ -117,11 +109,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
      * @param user  Selected user
      * @return Unit
      */
-    private fun goToDetailUser(user: User) {
-        Intent(this, DetailUserActivity::class.java).apply {
-            putExtra(EXTRA_DETAIL, user)
-        }.also {
-            startActivity(it)
-        }
+    private fun goToDetailUser(user: SimpleUser) {
+        Toast.makeText(this, user.login, Toast.LENGTH_SHORT).show()
     }
 }
