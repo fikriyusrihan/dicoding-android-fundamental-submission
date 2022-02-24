@@ -3,7 +3,6 @@ package com.artworkspace.github.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +12,7 @@ import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.model.User
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var rvUsers: RecyclerView
@@ -26,13 +25,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarHome)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         rvUsers = binding.rvUsers
         rvUsers.setHasFixedSize(true)
 
         list.addAll(listUsers)
         showRecyclerView()
-        
-        binding.ivProfile.setOnClickListener(this)
     }
 
 
@@ -66,31 +66,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             return listUsers
         }
-
-
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.iv_profile -> {
-
-                val profile = User(
-                    getString(R.string.my_username),
-                    getString(R.string.my_name),
-                    getString(R.string.my_location),
-                    getString(R.string._50).toInt(),
-                    getString(R.string.my_company),
-                    getString(R.string._24).toInt(),
-                    getString(R.string._24).toInt(),
-                    R.drawable.user11
-                )
-
-                Intent(this, DetailUserActivity::class.java).apply {
-                    putExtra(EXTRA_DETAIL, profile)
-                }.also {
-                    startActivity(it)
-                }
-            }
-        }
-    }
 
 
     /**
