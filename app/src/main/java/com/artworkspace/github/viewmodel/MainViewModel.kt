@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.artworkspace.github.Utils.Companion.TOKEN
 import com.artworkspace.github.model.ResponseSearch
 import com.artworkspace.github.model.SimpleUser
 import com.artworkspace.github.repository.ApiConfig
@@ -39,11 +40,9 @@ class MainViewModel: ViewModel() {
                     response: Response<ResponseSearch>
                 ) {
                     _isLoading.value = false
-                    if (response.isSuccessful) {
-                        _simpleUsers.value = response.body()?.items
-                    } else {
-                        Log.e(TAG, response.message())
-                    }
+                    if (response.isSuccessful) _simpleUsers.value = response.body()?.items
+                    else Log.e(TAG, response.message())
+
                 }
 
                 override fun onFailure(call: Call<ResponseSearch>, t: Throwable) {
@@ -56,7 +55,6 @@ class MainViewModel: ViewModel() {
 
     companion object {
         private val TAG = MainViewModel::class.java.simpleName
-        private const val TOKEN = "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"
     }
 
 }

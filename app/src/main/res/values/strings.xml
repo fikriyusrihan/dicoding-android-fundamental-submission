@@ -21,4 +21,7 @@
     <string name="search">Search</string>
     <string name="github_username">GitHub Username</string>
     <string name="showing_results">Showing %d results</string>
+    <string name="bio_dummy">This is my bio</string>
+    <string name="site_dummy">mysite.com</string>
+    <string name="email_dummy">my@email.com</string>
 </resources>

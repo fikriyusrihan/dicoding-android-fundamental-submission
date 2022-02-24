@@ -22,19 +22,16 @@ data class ResponseFollowing(
 	val responseUser: ArrayList<SimpleUser>
 )
 
-data class NewUser(
-
-	@field:SerializedName("twitter_username")
-	val twitterUsername: String,
+data class User(
 
 	@field:SerializedName("bio")
-	val bio: String,
+	val bio: String?,
 
 	@field:SerializedName("login")
 	val login: String,
 
 	@field:SerializedName("blog")
-	val blog: String,
+	val blog: String?,
 
 	@field:SerializedName("followers")
 	val followers: Int,
@@ -52,16 +49,13 @@ data class NewUser(
 	val name: String,
 
 	@field:SerializedName("company")
-	val company: String,
+	val company: String?,
 
 	@field:SerializedName("location")
-	val location: String,
+	val location: String?,
 
 	@field:SerializedName("public_repos")
 	val publicRepos: Int,
-
-	@field:SerializedName("email")
-	val email: Any
 )
 
 data class SimpleUser(
@@ -70,10 +64,7 @@ data class SimpleUser(
 	val avatarUrl: String,
 
 	@field:SerializedName("login")
-	val login: String,
-
-	@field:SerializedName("url")
-	val url: String
+	val login: String
 )
 
 

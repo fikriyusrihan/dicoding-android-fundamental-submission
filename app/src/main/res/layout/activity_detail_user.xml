@@ -13,7 +13,15 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorOnPrimary" />
 
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="gone" />
+
     <ScrollView
+        android:id="@+id/sc_content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -63,17 +71,25 @@
 
             </LinearLayout>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+                tools:layout_editor_absoluteX="24dp" />
+
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:weightSum="3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+                app:layout_constraintTop_toBottomOf="@+id/divider_1">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -137,41 +153,86 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_company"
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:drawablePadding="8dp"
-                app:drawableStartCompat="@drawable/ic_baseline_apartment_16"
-                app:flow_verticalAlign="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-                tools:text="@string/company" />
+                tools:layout_editor_absoluteX="24dp" />
 
-            <TextView
-                android:id="@+id/tv_location"
+            <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:drawablePadding="8dp"
-                app:drawableStartCompat="@drawable/ic_baseline_location_on_16"
-                app:flow_verticalAlign="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_company"
-                tools:text="@string/location" />
+                android:layout_marginTop="24dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/divider_2"
+                tools:layout_editor_absoluteX="24dp">
+
+                <TextView
+                    android:id="@+id/tv_bio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/ic_baseline_person_16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider_2"
+                    tools:text="@string/bio_dummy" />
+
+                <TextView
+                    android:id="@+id/tv_company"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:drawablePadding="8dp"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/ic_baseline_apartment_16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_bio"
+                    tools:text="@string/company" />
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:drawablePadding="8dp"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/ic_baseline_location_on_16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_company"
+                    tools:text="@string/location" />
+
+                <TextView
+                    android:id="@+id/tv_blog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:drawablePadding="8dp"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/ic_baseline_blog_16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location"
+                    tools:text="@string/site_dummy" />
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/btn_open"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:text="@string/open_on_github"
+                android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_location" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

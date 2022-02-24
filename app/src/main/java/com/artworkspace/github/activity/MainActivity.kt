@@ -2,16 +2,17 @@ package com.artworkspace.github.activity
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.artworkspace.github.R
+import com.artworkspace.github.activity.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.model.SimpleUser
@@ -82,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         else binding.pbLoading.visibility = View.GONE
     }
 
-
     /**
      * Showing up result, setup layout manager, adapter, and onClickItemCallback
      */
@@ -102,7 +102,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
     /**
      * Go to detail page with selected user data
      *
@@ -110,6 +109,10 @@ class MainActivity : AppCompatActivity() {
      * @return Unit
      */
     private fun goToDetailUser(user: SimpleUser) {
-        Toast.makeText(this, user.login, Toast.LENGTH_SHORT).show()
+        Intent(this@MainActivity, DetailUserActivity::class.java).apply {
+            putExtra(EXTRA_DETAIL, user.login)
+        }.also {
+            startActivity(it)
+        }
     }
 }
