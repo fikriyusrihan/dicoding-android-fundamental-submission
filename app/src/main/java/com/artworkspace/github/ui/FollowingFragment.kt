@@ -24,17 +24,15 @@ class FollowingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentFollowingBinding.inflate(layoutInflater, container, false)
 
-        val layoutManager = LinearLayoutManager(activity)
-        binding.rvUsers.layoutManager = layoutManager
-
-        val username = arguments?.getString("username") ?: ""
-        followingViewModel.getUserFollowing(username)
-
-        followingViewModel.following.observe(viewLifecycleOwner) {
-            showFollowing(it)
+        followingViewModel.following.observe(viewLifecycleOwner) { following ->
+            if (following == null) {
+                val username = arguments?.getString("username") ?: ""
+                followingViewModel.getUserFollowing(username)
+            } else {
+                showFollowing(following)
+            }
         }
 
         followingViewModel.isLoading.observe(viewLifecycleOwner) {
@@ -44,19 +42,39 @@ class FollowingFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Showing up result, setup layout manager, adapter, and onClickItemCallback
+     *
+     * @param users Following
+     * @return Unit
+     */
     private fun showFollowing(users: ArrayList<SimpleUser>) {
-        val adapter = ListUserAdapter(users)
-        binding.rvUsers.adapter = adapter
-        binding.rvUsers.setHasFixedSize(true)
+        if (users.size > 0) {
+            val linearLayoutManager = LinearLayoutManager(activity)
+            val listAdapter = ListUserAdapter(users)
 
-        adapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(user: SimpleUser) {
-                goToDetailUser(user)
+            binding.rvUsers.apply {
+                layoutManager = linearLayoutManager
+                adapter = listAdapter
+                setHasFixedSize(true)
             }
 
-        })
+            listAdapter.setOnItemClickCallback(object :
+                ListUserAdapter.OnItemClickCallback {
+                override fun onItemClicked(user: SimpleUser) {
+                    goToDetailUser(user)
+                }
+
+            })
+        } else binding.tvStatus.visibility = View.VISIBLE
     }
 
+    /**
+     * Showing loading indicator
+     *
+     * @param isLoading Loading state
+     * @return Unit
+     */
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) binding.pbLoading.visibility = View.VISIBLE
         else binding.pbLoading.visibility = View.GONE

@@ -21,7 +21,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityDetailUserBinding
     private lateinit var username: String
-    private lateinit var user: User
+    private lateinit var profileUrl: String
 
     private val detailViewModel by viewModels<DetailViewModel>()
 
@@ -29,29 +29,18 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbarDetail)
-        supportActionBar?.apply {
-            setDisplayShowHomeEnabled(true)
-            setDisplayHomeAsUpEnabled(true)
-            title = getString(R.string.profile)
-        }
-
         username = intent.extras?.get(EXTRA_DETAIL) as String
-        detailViewModel.getUserDetail(username)
 
-        val sectionPagerAdapter = SectionPagerAdapter(this, username)
-        val viewPager: ViewPager2 = binding.viewPager
-        viewPager.adapter = sectionPagerAdapter
-        val tabs: TabLayout = binding.tabs
-        TabLayoutMediator(tabs, viewPager) { tab, position ->
-            tab.text = resources.getString(TAB_TITLES[position])
-        }.attach()
+        setContentView(binding.root)
+        setViewPager()
+        setToolbar()
 
-        detailViewModel.user.observe(this) {
-            user = it
-            parseUserDetail(user)
+        detailViewModel.user.observe(this) { user ->
+            if (user == null) detailViewModel.getUserDetail(username)
+            else {
+                parseUserDetail(user)
+                profileUrl = user.htmlUrl
+            }
         }
 
         detailViewModel.isLoading.observe(this) {
@@ -70,7 +59,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         when (v?.id) {
             R.id.btn_open -> {
                 Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(user.htmlUrl)
+                    data = Uri.parse(profileUrl)
                 }.also {
                     startActivity(it)
                 }
@@ -78,13 +67,56 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * Setting up toolbar
+     *
+     * @return Unit
+     */
+    private fun setToolbar() {
+        setSupportActionBar(binding.toolbarDetail)
+        binding.collapsingToolbar.isTitleEnabled = false
+        supportActionBar?.apply {
+            setDisplayShowHomeEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            title = getString(R.string.profile)
+        }
+    }
+
+    /**
+     * Setting up viewpager
+     *
+     * @return Unit
+     */
+    private fun setViewPager() {
+        val viewPager: ViewPager2 = binding.viewPager
+        val tabs: TabLayout = binding.tabs
+
+        viewPager.adapter = SectionPagerAdapter(this, username)
+
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
+    }
+
+    /**
+     * Showing loading indicator
+     *
+     * @param isLoading Loading state
+     * @return Unit
+     */
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
-            binding.pbLoading.visibility = View.VISIBLE
-            binding.appBarLayout.visibility = View.INVISIBLE
+            binding.apply {
+                pbLoading.visibility = View.VISIBLE
+                appBarLayout.visibility = View.INVISIBLE
+                viewPager.visibility = View.INVISIBLE
+            }
         } else {
-            binding.pbLoading.visibility = View.GONE
-            binding.appBarLayout.visibility = View.VISIBLE
+            binding.apply {
+                pbLoading.visibility = View.GONE
+                appBarLayout.visibility = View.VISIBLE
+                viewPager.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -96,12 +128,12 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun parseUserDetail(user: User) {
         binding.apply {
-            tvName.text = user.name
             tvUsername.text = user.login
             tvRepositories.text = user.publicRepos.toString()
             tvFollowers.text = user.followers.toString()
             tvFollowing.text = user.following.toString()
 
+            tvName.setAndVisible(user.name)
             tvBio.setAndVisible(user.bio)
             tvCompany.setAndVisible(user.company)
             tvLocation.setAndVisible(user.location)
@@ -113,7 +145,6 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         const val EXTRA_DETAIL = "extra_detail"
-
         private val TAB_TITLES = intArrayOf(
             R.string.followers,
             R.string.following

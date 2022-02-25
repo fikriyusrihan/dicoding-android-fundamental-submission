@@ -12,12 +12,19 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class FollowingViewModel : ViewModel() {
-    private val _isLoading = MutableLiveData<Boolean>()
+
+    private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _following = MutableLiveData<ArrayList<SimpleUser>>()
-    val following: LiveData<ArrayList<SimpleUser>> = _following
+    private val _following = MutableLiveData<ArrayList<SimpleUser>?>(null)
+    val following: LiveData<ArrayList<SimpleUser>?> = _following
 
+    /**
+     *  Get following information of an user
+     *
+     *  @param username GitHub username
+     *  @return Unit
+     */
     fun getUserFollowing(username: String) {
         _isLoading.value = true
 
@@ -28,9 +35,9 @@ class FollowingViewModel : ViewModel() {
                         call: Call<ArrayList<SimpleUser>>,
                         response: Response<ArrayList<SimpleUser>>
                     ) {
-                        _isLoading.value = false
                         if (response.isSuccessful) _following.value = response.body()
                         else Log.e(TAG, response.message())
+                        _isLoading.value = false
                     }
 
                     override fun onFailure(call: Call<ArrayList<SimpleUser>>, t: Throwable) {

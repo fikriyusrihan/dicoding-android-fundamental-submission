@@ -14,7 +14,7 @@ import retrofit2.Response
 
 class MainViewModel: ViewModel() {
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val _simpleUsers = MutableLiveData<ArrayList<SimpleUser>>()
@@ -39,9 +39,9 @@ class MainViewModel: ViewModel() {
                     call: Call<ResponseSearch>,
                     response: Response<ResponseSearch>
                 ) {
-                    _isLoading.value = false
                     if (response.isSuccessful) _simpleUsers.value = response.body()?.items
                     else Log.e(TAG, response.message())
+                    _isLoading.value = false
                 }
 
                 override fun onFailure(call: Call<ResponseSearch>, t: Throwable) {
