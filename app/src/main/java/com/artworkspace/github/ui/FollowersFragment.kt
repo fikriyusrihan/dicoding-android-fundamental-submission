@@ -49,21 +49,24 @@ class FollowersFragment : Fragment() {
      * @return Unit
      */
     private fun showFollowers(users: ArrayList<SimpleUser>) {
-        val linearLayoutManager = LinearLayoutManager(activity)
-        val listAdapter = ListUserAdapter(users)
+        if (users.size > 0) {
+            val linearLayoutManager = LinearLayoutManager(activity)
+            val listAdapter = ListUserAdapter(users)
 
-        binding.rvUsers.apply {
-            layoutManager = linearLayoutManager
-            adapter = listAdapter
-            setHasFixedSize(true)
-        }
-
-        listAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(user: SimpleUser) {
-                goToDetailUser(user)
+            binding.rvUsers.apply {
+                layoutManager = linearLayoutManager
+                adapter = listAdapter
+                setHasFixedSize(true)
             }
 
-        })
+            listAdapter.setOnItemClickCallback(object :
+                ListUserAdapter.OnItemClickCallback {
+                override fun onItemClicked(user: SimpleUser) {
+                    goToDetailUser(user)
+                }
+
+            })
+        } else binding.tvStatus.visibility = View.VISIBLE
     }
 
     /**

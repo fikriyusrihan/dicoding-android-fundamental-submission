@@ -16,4 +16,5 @@
     <string name="showing_results">Showing %d results</string>
     <string name="bio_dummy">This is my bio</string>
     <string name="site_dummy">mysite.com</string>
+    <string name="no_users_found">No users found.</string>
 </resources>

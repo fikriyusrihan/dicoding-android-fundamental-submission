@@ -128,12 +128,12 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
      */
     private fun parseUserDetail(user: User) {
         binding.apply {
-            tvName.text = user.name
             tvUsername.text = user.login
             tvRepositories.text = user.publicRepos.toString()
             tvFollowers.text = user.followers.toString()
             tvFollowing.text = user.following.toString()
 
+            tvName.setAndVisible(user.name)
             tvBio.setAndVisible(user.bio)
             tvCompany.setAndVisible(user.company)
             tvLocation.setAndVisible(user.location)

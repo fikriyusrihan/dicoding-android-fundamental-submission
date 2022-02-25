@@ -38,7 +38,7 @@ data class User(
 	val following: Int,
 
 	@field:SerializedName("name")
-	val name: String,
+	val name: String?,
 
 	@field:SerializedName("company")
 	val company: String?,
