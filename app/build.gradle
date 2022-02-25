@@ -14,9 +14,12 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField("String", "API_KEY", '"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"')
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def localProperties = new Properties()
+        localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
+        buildConfigField("String", "API_KEY", "\"" + localProperties['apiKey'] + "\"")
     }
 
     buildTypes {
