@@ -1,4 +1,4 @@
-package com.artworkspace.github.activity
+package com.artworkspace.github.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -81,10 +81,10 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.pbLoading.visibility = View.VISIBLE
-            binding.scContentContainer.visibility = View.GONE
+            binding.appBarLayout.visibility = View.INVISIBLE
         } else {
             binding.pbLoading.visibility = View.GONE
-            binding.scContentContainer.visibility = View.VISIBLE
+            binding.appBarLayout.visibility = View.VISIBLE
         }
     }
 

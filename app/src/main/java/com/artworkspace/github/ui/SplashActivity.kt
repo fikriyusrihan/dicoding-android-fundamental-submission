@@ -1,4 +1,4 @@
-package com.artworkspace.github.activity
+package com.artworkspace.github.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent

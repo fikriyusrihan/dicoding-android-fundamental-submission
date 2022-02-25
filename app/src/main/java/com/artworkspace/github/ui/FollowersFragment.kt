@@ -1,5 +1,6 @@
-package com.artworkspace.github
+package com.artworkspace.github.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -46,11 +47,33 @@ class FollowersFragment : Fragment() {
     private fun showFollowers(users: ArrayList<SimpleUser>) {
         val adapter = ListUserAdapter(users)
         binding.rvUsers.adapter = adapter
+        binding.rvUsers.setHasFixedSize(true)
+
+        adapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
+            override fun onItemClicked(user: SimpleUser) {
+                goToDetailUser(user)
+            }
+
+        })
     }
 
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) binding.pbLoading.visibility = View.VISIBLE
         else binding.pbLoading.visibility = View.GONE
+    }
+
+    /**
+     * Go to detail page with selected user data
+     *
+     * @param user  Selected user
+     * @return Unit
+     */
+    private fun goToDetailUser(user: SimpleUser) {
+        Intent(activity, DetailUserActivity::class.java).apply {
+            putExtra(DetailUserActivity.EXTRA_DETAIL, user.login)
+        }.also {
+            startActivity(it)
+        }
     }
 
 }
