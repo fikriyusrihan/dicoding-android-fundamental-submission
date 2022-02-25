@@ -82,9 +82,11 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         if (isLoading) {
             binding.pbLoading.visibility = View.VISIBLE
             binding.appBarLayout.visibility = View.INVISIBLE
+            binding.viewPager.visibility = View.INVISIBLE
         } else {
             binding.pbLoading.visibility = View.GONE
             binding.appBarLayout.visibility = View.VISIBLE
+            binding.viewPager.visibility = View.VISIBLE
         }
     }
 
