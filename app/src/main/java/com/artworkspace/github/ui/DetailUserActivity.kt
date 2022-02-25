@@ -20,36 +20,41 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var binding: ActivityDetailUserBinding
-    private lateinit var username: String
-    private lateinit var profileUrl: String
+    private var _binding: ActivityDetailUserBinding? = null
+    private val binding get() = _binding!!
+
+    private var username: String? = null
+    private var profileUrl: String? = null
 
     private val detailViewModel by viewModels<DetailViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityDetailUserBinding.inflate(layoutInflater)
+        _binding = ActivityDetailUserBinding.inflate(layoutInflater)
         username = intent.extras?.get(EXTRA_DETAIL) as String
 
         setContentView(binding.root)
         setViewPager()
         setToolbar()
 
-        detailViewModel.isError.observe(this) { error ->
-            detailViewModel.user.observe(this) { user ->
-                if (!error) {
-                    if (user == null) detailViewModel.getUserDetail(username)
-                    else {
-                        parseUserDetail(user)
-                        profileUrl = user.htmlUrl
-                    }
-                } else errorOccurred()
+        detailViewModel.user.observe(this) { user ->
+            if (user != null) {
+                parseUserDetail(user)
+                profileUrl = user.htmlUrl
             }
         }
 
         detailViewModel.isLoading.observe(this) {
             showLoading(it)
+        }
+
+        detailViewModel.isError.observe(this) { error ->
+            if (error) errorOccurred()
+        }
+
+        detailViewModel.callCounter.observe(this) { counter ->
+            if (counter < 1) detailViewModel.getUserDetail(username!!)
         }
 
         binding.btnOpen.setOnClickListener(this)
@@ -72,6 +77,14 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    override fun onDestroy() {
+        _binding = null
+        username = null
+        profileUrl = null
+
+        super.onDestroy()
+    }
+
     /**
      * Setting UI when an error occurred
      *
@@ -83,7 +96,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             tabs.visibility = View.INVISIBLE
             viewPager.visibility = View.INVISIBLE
         }
-        Toast.makeText(this, "An Error is Occurred", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@DetailUserActivity, "An Error is Occurred", Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -110,7 +123,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         val viewPager: ViewPager2 = binding.viewPager
         val tabs: TabLayout = binding.tabs
 
-        viewPager.adapter = SectionPagerAdapter(this, username)
+        viewPager.adapter = SectionPagerAdapter(this, username!!)
 
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])

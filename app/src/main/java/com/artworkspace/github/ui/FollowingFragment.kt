@@ -9,14 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.adapter.ListUserAdapter
+import com.artworkspace.github.adapter.SectionPagerAdapter.Companion.ARGS_USERNAME
 import com.artworkspace.github.databinding.FragmentFollowingBinding
 import com.artworkspace.github.model.SimpleUser
 import com.artworkspace.github.viewmodel.FollowingViewModel
 
 class FollowingFragment : Fragment() {
 
-    private lateinit var _binding: FragmentFollowingBinding
-    private val binding get() = _binding
+    private var _binding: FragmentFollowingBinding? = null
+    private val binding get() = _binding!!
 
     private val followingViewModel by viewModels<FollowingViewModel>()
 
@@ -28,7 +29,7 @@ class FollowingFragment : Fragment() {
 
         followingViewModel.following.observe(viewLifecycleOwner) { following ->
             if (following == null) {
-                val username = arguments?.getString("username") ?: ""
+                val username = arguments?.getString(ARGS_USERNAME) ?: ""
                 followingViewModel.getUserFollowing(username)
             } else {
                 showFollowing(following)
@@ -40,6 +41,11 @@ class FollowingFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     /**

@@ -10,6 +10,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/card_image_profile"
+        android:contentDescription="@string/user_profile_picture"
         android:layout_width="48dp"
         android:layout_height="48dp"
         tools:src="@drawable/dummy_profile"

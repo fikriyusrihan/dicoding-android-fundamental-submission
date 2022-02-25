@@ -10,26 +10,28 @@ import com.artworkspace.github.ui.FollowingFragment
 class SectionPagerAdapter(activity: AppCompatActivity, private val username: String) :
     FragmentStateAdapter(activity) {
 
-    override fun getItemCount(): Int {
-        return 2
-    }
+    override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> {
                 FollowersFragment().apply {
                     arguments = Bundle().apply {
-                        putString("username", username)
+                        putString(ARGS_USERNAME, username)
                     }
                 }
             }
             else -> {
                 FollowingFragment().apply {
                     arguments = Bundle().apply {
-                        putString("username", username)
+                        putString(ARGS_USERNAME, username)
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        const val ARGS_USERNAME = "username"
     }
 }

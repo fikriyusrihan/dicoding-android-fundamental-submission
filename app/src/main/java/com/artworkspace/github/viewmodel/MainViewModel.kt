@@ -17,6 +17,9 @@ class MainViewModel: ViewModel() {
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isError = MutableLiveData(false)
+    val isError: LiveData<Boolean> = _isError
+
     private val _simpleUsers = MutableLiveData<ArrayList<SimpleUser>>()
     val simpleUsers: LiveData<ArrayList<SimpleUser>> = _simpleUsers
 
@@ -41,13 +44,16 @@ class MainViewModel: ViewModel() {
                 ) {
                     if (response.isSuccessful) _simpleUsers.value = response.body()?.items
                     else Log.e(TAG, response.message())
+
                     _isLoading.value = false
+                    _isError.value = false
                 }
 
                 override fun onFailure(call: Call<ResponseSearch>, t: Throwable) {
                     Log.e(TAG, t.message.toString())
 
                     _simpleUsers.value = arrayListOf()
+                    _isError.value = true
                     _isLoading.value = false
                 }
 
