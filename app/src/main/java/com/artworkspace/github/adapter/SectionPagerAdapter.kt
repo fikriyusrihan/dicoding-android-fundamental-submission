@@ -23,7 +23,13 @@ class SectionPagerAdapter(activity: AppCompatActivity, private val username: Str
                     }
                 }
             }
-            else -> FollowingFragment()
+            else -> {
+                FollowingFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("username", username)
+                    }
+                }
+            }
         }
     }
 }

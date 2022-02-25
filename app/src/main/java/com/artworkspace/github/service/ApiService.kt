@@ -44,4 +44,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("username") username: String
     ): Call<ArrayList<SimpleUser>>
+
+    @GET("users/{username}/following")
+    fun getUserFollowing(
+        @Header("Authorization") token: String,
+        @Path("username") username: String
+    ): Call<ArrayList<SimpleUser>>
 }
