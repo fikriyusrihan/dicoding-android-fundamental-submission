@@ -1,4 +1,4 @@
-package com.artworkspace.github.activity
+package com.artworkspace.github.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -6,12 +6,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
 import com.artworkspace.github.Utils.Companion.setAndVisible
 import com.artworkspace.github.Utils.Companion.setImageGlide
+import com.artworkspace.github.adapter.SectionPagerAdapter
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.model.User
 import com.artworkspace.github.viewmodel.DetailViewModel
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -36,6 +40,14 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
         username = intent.extras?.get(EXTRA_DETAIL) as String
         detailViewModel.getUserDetail(username)
+
+        val sectionPagerAdapter = SectionPagerAdapter(this, username)
+        val viewPager: ViewPager2 = binding.viewPager
+        viewPager.adapter = sectionPagerAdapter
+        val tabs: TabLayout = binding.tabs
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
 
         detailViewModel.user.observe(this) {
             user = it
@@ -69,10 +81,10 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.pbLoading.visibility = View.VISIBLE
-            binding.scContentContainer.visibility = View.GONE
+            binding.appBarLayout.visibility = View.INVISIBLE
         } else {
             binding.pbLoading.visibility = View.GONE
-            binding.scContentContainer.visibility = View.VISIBLE
+            binding.appBarLayout.visibility = View.VISIBLE
         }
     }
 
@@ -101,5 +113,10 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         const val EXTRA_DETAIL = "extra_detail"
+
+        private val TAB_TITLES = intArrayOf(
+            R.string.followers,
+            R.string.following
+        )
     }
 }

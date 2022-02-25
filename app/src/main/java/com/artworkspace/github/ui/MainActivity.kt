@@ -1,4 +1,4 @@
-package com.artworkspace.github.activity
+package com.artworkspace.github.ui
 
 import android.app.SearchManager
 import android.content.Context
@@ -12,7 +12,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.artworkspace.github.R
-import com.artworkspace.github.activity.DetailUserActivity.Companion.EXTRA_DETAIL
+import com.artworkspace.github.ui.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.model.SimpleUser

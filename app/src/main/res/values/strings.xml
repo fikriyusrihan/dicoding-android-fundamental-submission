@@ -24,4 +24,5 @@
     <string name="bio_dummy">This is my bio</string>
     <string name="site_dummy">mysite.com</string>
     <string name="email_dummy">my@email.com</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

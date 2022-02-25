@@ -15,11 +15,11 @@ data class ResponseSearch(
 )
 
 data class ResponseFollowers(
-	val responseUser: ArrayList<SimpleUser>
+	val responseUsers: ArrayList<SimpleUser>
 )
 
 data class ResponseFollowing(
-	val responseUser: ArrayList<SimpleUser>
+	val responseUsers: ArrayList<SimpleUser>
 )
 
 data class User(
