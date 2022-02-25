@@ -6,36 +6,33 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.artworkspace.github.R
-import com.artworkspace.github.ui.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.model.SimpleUser
+import com.artworkspace.github.ui.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var rvUsers: RecyclerView
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
     private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbarHome)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        rvUsers = binding.rvUsers
-        rvUsers.setHasFixedSize(true)
 
         mainViewModel.simpleUsers.observe(this) {
             showSearchingResult(it)
@@ -43,6 +40,10 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.isLoading.observe(this) {
             showLoading(it)
+        }
+
+        mainViewModel.isError.observe(this) { error ->
+            if (error) errorOccurred()
         }
     }
 
@@ -72,6 +73,20 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
+
+    /**
+     * Setting UI when an error occurred
+     *
+     * @return Unit
+     */
+    private fun errorOccurred() {
+        Toast.makeText(this@MainActivity, "An Error is Occurred", Toast.LENGTH_SHORT).show()
+    }
+
     /**
      * Determine loading indicator is visible or not
      *
@@ -85,14 +100,20 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Showing up result, setup layout manager, adapter, and onClickItemCallback
+     *
+     * @param user List of Users
+     * @return Unit
      */
     private fun showSearchingResult(user: ArrayList<SimpleUser>) {
         binding.tvResultCount.text = getString(R.string.showing_results, user.size)
 
-        rvUsers.layoutManager = LinearLayoutManager(this)
-
         val listUserAdapter = ListUserAdapter(user)
-        rvUsers.adapter = listUserAdapter
+
+        binding.rvUsers.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = listUserAdapter
+            setHasFixedSize(true)
+        }
 
         listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(user: SimpleUser) {

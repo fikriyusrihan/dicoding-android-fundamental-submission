@@ -9,14 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.adapter.ListUserAdapter
+import com.artworkspace.github.adapter.SectionPagerAdapter.Companion.ARGS_USERNAME
 import com.artworkspace.github.databinding.FragmentFollowersBinding
 import com.artworkspace.github.model.SimpleUser
 import com.artworkspace.github.viewmodel.FollowersViewModel
 
 class FollowersFragment : Fragment() {
 
-    private lateinit var _binding: FragmentFollowersBinding
-    private val binding get() = _binding
+    private var _binding: FragmentFollowersBinding? = null
+    private val binding get() = _binding!!
 
     private val followersViewModel by viewModels<FollowersViewModel>()
 
@@ -28,7 +29,7 @@ class FollowersFragment : Fragment() {
 
         followersViewModel.followers.observe(viewLifecycleOwner) { followers ->
             if (followers == null) {
-                val username = arguments?.getString("username") ?: ""
+                val username = arguments?.getString(ARGS_USERNAME) ?: ""
                 followersViewModel.getUserFollowers(username)
             } else {
                 showFollowers(followers)
@@ -40,6 +41,11 @@ class FollowersFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     /**

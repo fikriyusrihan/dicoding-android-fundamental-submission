@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -11,8 +13,11 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         Intent(this, MainActivity::class.java).also {
-            startActivity(it)
-            finish()
+            runBlocking {
+                delay(500)
+                startActivity(it)
+                finish()
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class Utils {
     companion object {
-        const val TOKEN = "YOUR_API_TOKEN_KEY"
+        const val TOKEN = BuildConfig.API_KEY
 
         /**
          * Extension function to set CircleImageView using Glide
@@ -26,7 +26,7 @@ class Utils {
         }
 
         /**
-         * Extension function to set and show hidden TextView if text has value
+         * Extension function to set and show hidden TextView if the text has value
          *
          * @param text  Text to set
          * @return Unit

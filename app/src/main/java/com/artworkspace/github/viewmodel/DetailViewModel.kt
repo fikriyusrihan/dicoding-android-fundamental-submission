@@ -15,6 +15,12 @@ class DetailViewModel : ViewModel() {
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _callCounter = MutableLiveData(0)
+    val callCounter: LiveData<Int> = _callCounter
+
+    private val _isError = MutableLiveData(false)
+    val isError: LiveData<Boolean> = _isError
+
     private val _user = MutableLiveData<User?>(null)
     val user: LiveData<User?> = _user
 
@@ -26,6 +32,7 @@ class DetailViewModel : ViewModel() {
      */
     fun getUserDetail(username: String) {
         _isLoading.value = true
+        _callCounter.value = 1
 
         ApiConfig.getApiService().getUserDetail(token = "Bearer $TOKEN", username).apply {
             enqueue(object : Callback<User> {
@@ -34,10 +41,14 @@ class DetailViewModel : ViewModel() {
                     else Log.e(TAG, response.message())
 
                     _isLoading.value = false
+                    _isError.value = false
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {
                     Log.e(TAG, t.message.toString())
+
+                    _isLoading.value = false
+                    _isError.value = true
                 }
 
             })

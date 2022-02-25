@@ -17,4 +17,5 @@
     <string name="bio_dummy">This is my bio</string>
     <string name="site_dummy">mysite.com</string>
     <string name="no_users_found">No users found.</string>
+    <string name="user_profile_picture">User Profile Picture</string>
 </resources>
