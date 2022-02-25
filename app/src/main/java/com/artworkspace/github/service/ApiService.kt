@@ -1,6 +1,8 @@
 package com.artworkspace.github.service
 
+import com.artworkspace.github.model.ResponseFollowers
 import com.artworkspace.github.model.ResponseSearch
+import com.artworkspace.github.model.SimpleUser
 import com.artworkspace.github.model.User
 import retrofit2.Call
 import retrofit2.http.GET
@@ -35,4 +37,11 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("username") username: String
     ): Call<User>
+
+
+    @GET("users/{username}/followers")
+    fun getUserFollowers(
+        @Header("Authorization") token: String,
+        @Path("username") username: String
+    ): Call<ArrayList<SimpleUser>>
 }

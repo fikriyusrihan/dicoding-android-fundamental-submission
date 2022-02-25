@@ -8,7 +8,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class Utils {
     companion object {
-        const val TOKEN = "YOUR_GITHUB_AUTH_TOKEN"
+        const val TOKEN = "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"
 
         /**
          * Extension function to set CircleImageView using Glide
