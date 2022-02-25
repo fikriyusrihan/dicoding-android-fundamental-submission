@@ -42,6 +42,9 @@ class FollowersViewModel : ViewModel() {
 
                     override fun onFailure(call: Call<ArrayList<SimpleUser>>, t: Throwable) {
                         Log.e(TAG, t.message.toString())
+
+                        _followers.value = arrayListOf()
+                        _isLoading.value = false
                     }
 
                 })

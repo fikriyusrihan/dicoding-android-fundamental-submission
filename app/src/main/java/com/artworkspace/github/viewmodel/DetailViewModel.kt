@@ -15,6 +15,9 @@ class DetailViewModel : ViewModel() {
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isError = MutableLiveData(false)
+    val isError: LiveData<Boolean> = _isError
+
     private val _user = MutableLiveData<User?>(null)
     val user: LiveData<User?> = _user
 
@@ -34,10 +37,14 @@ class DetailViewModel : ViewModel() {
                     else Log.e(TAG, response.message())
 
                     _isLoading.value = false
+                    _isError.value = false
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {
                     Log.e(TAG, t.message.toString())
+
+                    _isLoading.value = false
+                    _isError.value = true
                 }
 
             })

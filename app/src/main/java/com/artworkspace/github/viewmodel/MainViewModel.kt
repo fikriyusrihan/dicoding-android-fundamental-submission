@@ -46,6 +46,9 @@ class MainViewModel: ViewModel() {
 
                 override fun onFailure(call: Call<ResponseSearch>, t: Throwable) {
                     Log.e(TAG, t.message.toString())
+
+                    _simpleUsers.value = arrayListOf()
+                    _isLoading.value = false
                 }
 
             })

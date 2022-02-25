@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -35,11 +36,15 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         setViewPager()
         setToolbar()
 
-        detailViewModel.user.observe(this) { user ->
-            if (user == null) detailViewModel.getUserDetail(username)
-            else {
-                parseUserDetail(user)
-                profileUrl = user.htmlUrl
+        detailViewModel.isError.observe(this) { error ->
+            detailViewModel.user.observe(this) { user ->
+                if (!error) {
+                    if (user == null) detailViewModel.getUserDetail(username)
+                    else {
+                        parseUserDetail(user)
+                        profileUrl = user.htmlUrl
+                    }
+                } else errorOccurred()
             }
         }
 
@@ -65,6 +70,20 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    /**
+     * Setting UI when an error occurred
+     *
+     * @return Unit
+     */
+    private fun errorOccurred() {
+        binding.apply {
+            userDetailContainer.visibility = View.INVISIBLE
+            tabs.visibility = View.INVISIBLE
+            viewPager.visibility = View.INVISIBLE
+        }
+        Toast.makeText(this, "An Error is Occurred", Toast.LENGTH_SHORT).show()
     }
 
     /**
