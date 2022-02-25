@@ -1,6 +1,5 @@
 package com.artworkspace.github.service
 
-import com.artworkspace.github.model.ResponseFollowers
 import com.artworkspace.github.model.ResponseSearch
 import com.artworkspace.github.model.SimpleUser
 import com.artworkspace.github.model.User
@@ -39,12 +38,27 @@ interface ApiService {
     ): Call<User>
 
 
+    /**
+     * Get followers information of an user
+     *
+     * @param token GitHub token auth
+     * @param username Username
+     * @return Call<ArrayList<SimpleUser>>
+     */
     @GET("users/{username}/followers")
     fun getUserFollowers(
         @Header("Authorization") token: String,
         @Path("username") username: String
     ): Call<ArrayList<SimpleUser>>
 
+
+    /**
+     * Get following information of an user
+     *
+     * @param token GitHub token auth
+     * @param username Username
+     * @return Call<ArrayList<SimpleUser>>
+     */
     @GET("users/{username}/following")
     fun getUserFollowing(
         @Header("Authorization") token: String,

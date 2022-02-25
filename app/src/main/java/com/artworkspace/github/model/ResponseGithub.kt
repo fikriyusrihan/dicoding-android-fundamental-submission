@@ -14,14 +14,6 @@ data class ResponseSearch(
 	val items: ArrayList<SimpleUser>
 )
 
-data class ResponseFollowers(
-	val responseUsers: ArrayList<SimpleUser>
-)
-
-data class ResponseFollowing(
-	val responseUsers: ArrayList<SimpleUser>
-)
-
 data class User(
 
 	@field:SerializedName("bio")

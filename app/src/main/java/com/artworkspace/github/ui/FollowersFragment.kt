@@ -24,17 +24,15 @@ class FollowersFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentFollowersBinding.inflate(layoutInflater, container, false)
 
-        val layoutManager = LinearLayoutManager(activity)
-        binding.rvUsers.layoutManager = layoutManager
-
-        val username = arguments?.getString("username") ?: ""
-        followersViewModel.getUserFollowers(username)
-
-        followersViewModel.followers.observe(viewLifecycleOwner) {
-            showFollowers(it)
+        followersViewModel.followers.observe(viewLifecycleOwner) { followers ->
+            if (followers == null) {
+                val username = arguments?.getString("username") ?: ""
+                followersViewModel.getUserFollowers(username)
+            } else {
+                showFollowers(followers)
+            }
         }
 
         followersViewModel.isLoading.observe(viewLifecycleOwner) {
@@ -44,12 +42,23 @@ class FollowersFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Showing up result, setup layout manager, adapter, and onClickItemCallback
+     *
+     * @param users Followers
+     * @return Unit
+     */
     private fun showFollowers(users: ArrayList<SimpleUser>) {
-        val adapter = ListUserAdapter(users)
-        binding.rvUsers.adapter = adapter
-        binding.rvUsers.setHasFixedSize(true)
+        val linearLayoutManager = LinearLayoutManager(activity)
+        val listAdapter = ListUserAdapter(users)
 
-        adapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
+        binding.rvUsers.apply {
+            layoutManager = linearLayoutManager
+            adapter = listAdapter
+            setHasFixedSize(true)
+        }
+
+        listAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(user: SimpleUser) {
                 goToDetailUser(user)
             }
@@ -57,6 +66,12 @@ class FollowersFragment : Fragment() {
         })
     }
 
+    /**
+     * Showing loading indicator
+     *
+     * @param isLoading Loading state
+     * @return Unit
+     */
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) binding.pbLoading.visibility = View.VISIBLE
         else binding.pbLoading.visibility = View.GONE

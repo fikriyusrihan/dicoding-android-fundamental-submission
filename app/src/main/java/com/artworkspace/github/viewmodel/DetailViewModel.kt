@@ -12,11 +12,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class DetailViewModel : ViewModel() {
-    private val _isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> = _user
+    private val _user = MutableLiveData<User?>(null)
+    val user: LiveData<User?> = _user
 
     /**
      *  Get user detail information
@@ -30,9 +30,10 @@ class DetailViewModel : ViewModel() {
         ApiConfig.getApiService().getUserDetail(token = "Bearer $TOKEN", username).apply {
             enqueue(object : Callback<User> {
                 override fun onResponse(call: Call<User>, response: Response<User>) {
-                    _isLoading.value = false
                     if (response.isSuccessful) _user.value = response.body()
                     else Log.e(TAG, response.message())
+
+                    _isLoading.value = false
                 }
 
                 override fun onFailure(call: Call<User>, t: Throwable) {
