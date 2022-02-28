@@ -1,7 +1,6 @@
-package com.artworkspace.github.repository
+package com.artworkspace.github.data.remote.retrofit
 
 import com.artworkspace.github.BuildConfig
-import com.artworkspace.github.service.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

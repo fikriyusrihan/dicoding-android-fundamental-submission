@@ -1,4 +1,4 @@
-package com.artworkspace.github.ui
+package com.artworkspace.github.ui.view
 
 import android.content.Context
 import android.os.Bundle
@@ -10,10 +10,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.artworkspace.github.R
-import com.artworkspace.github.SettingPreferences
+import com.artworkspace.github.data.SettingPreferences
 import com.artworkspace.github.databinding.ActivitySettingBinding
-import com.artworkspace.github.viewmodel.SettingViewModel
-import com.artworkspace.github.viewmodel.ViewModelFactory
+import com.artworkspace.github.ui.viewmodel.SettingViewModel
+import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 

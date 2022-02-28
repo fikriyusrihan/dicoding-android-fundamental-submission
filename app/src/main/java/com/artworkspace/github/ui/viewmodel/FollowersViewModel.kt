@@ -1,12 +1,12 @@
-package com.artworkspace.github.viewmodel
+package com.artworkspace.github.ui.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.artworkspace.github.utils.Utils
-import com.artworkspace.github.model.SimpleUser
-import com.artworkspace.github.repository.ApiConfig
+import com.artworkspace.github.BuildConfig
+import com.artworkspace.github.data.remote.response.SimpleUser
+import com.artworkspace.github.data.remote.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +28,8 @@ class FollowersViewModel : ViewModel() {
     fun getUserFollowers(username: String) {
         _isLoading.value = true
 
-        ApiConfig.getApiService().getUserFollowers(token = "Bearer ${Utils.TOKEN}", username)
+        ApiConfig.getApiService()
+            .getUserFollowers(token = "Bearer ${BuildConfig.API_KEY}", username)
             .apply {
                 enqueue(object : Callback<ArrayList<SimpleUser>> {
                     override fun onResponse(

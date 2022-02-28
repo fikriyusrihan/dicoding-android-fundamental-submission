@@ -1,4 +1,4 @@
-package com.artworkspace.github
+package com.artworkspace.github.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

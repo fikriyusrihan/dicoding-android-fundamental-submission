@@ -1,12 +1,12 @@
-package com.artworkspace.github.viewmodel
+package com.artworkspace.github.ui.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.artworkspace.github.utils.Utils.Companion.TOKEN
-import com.artworkspace.github.model.User
-import com.artworkspace.github.repository.ApiConfig
+import com.artworkspace.github.BuildConfig
+import com.artworkspace.github.data.remote.response.User
+import com.artworkspace.github.data.remote.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,17 +34,18 @@ class DetailViewModel : ViewModel() {
         _isLoading.value = true
         _callCounter.value = 1
 
-        ApiConfig.getApiService().getUserDetail(token = "Bearer $TOKEN", username).apply {
-            enqueue(object : Callback<User> {
-                override fun onResponse(call: Call<User>, response: Response<User>) {
-                    if (response.isSuccessful) _user.value = response.body()
-                    else Log.e(TAG, response.message())
+        ApiConfig.getApiService().getUserDetail(token = "Bearer ${BuildConfig.API_KEY}", username)
+            .apply {
+                enqueue(object : Callback<User> {
+                    override fun onResponse(call: Call<User>, response: Response<User>) {
+                        if (response.isSuccessful) _user.value = response.body()
+                        else Log.e(TAG, response.message())
 
-                    _isLoading.value = false
-                    _isError.value = false
-                }
+                        _isLoading.value = false
+                        _isError.value = false
+                    }
 
-                override fun onFailure(call: Call<User>, t: Throwable) {
+                    override fun onFailure(call: Call<User>, t: Throwable) {
                     Log.e(TAG, t.message.toString())
 
                     _isLoading.value = false

@@ -1,4 +1,4 @@
-package com.artworkspace.github.ui
+package com.artworkspace.github.ui.view
 
 import android.app.SearchManager
 import android.content.Context
@@ -17,13 +17,13 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
-import com.artworkspace.github.SettingPreferences
 import com.artworkspace.github.adapter.ListUserAdapter
+import com.artworkspace.github.data.SettingPreferences
+import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityMainBinding
-import com.artworkspace.github.model.SimpleUser
-import com.artworkspace.github.ui.DetailUserActivity.Companion.EXTRA_DETAIL
-import com.artworkspace.github.viewmodel.MainViewModel
-import com.artworkspace.github.viewmodel.ViewModelFactory
+import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
+import com.artworkspace.github.ui.viewmodel.MainViewModel
+import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 

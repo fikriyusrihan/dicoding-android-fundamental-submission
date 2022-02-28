@@ -1,4 +1,4 @@
-package com.artworkspace.github.ui
+package com.artworkspace.github.ui.view
 
 import android.content.Intent
 import android.net.Uri
@@ -9,12 +9,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
-import com.artworkspace.github.utils.Utils.Companion.setAndVisible
-import com.artworkspace.github.utils.Utils.Companion.setImageGlide
 import com.artworkspace.github.adapter.SectionPagerAdapter
+import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
-import com.artworkspace.github.model.User
-import com.artworkspace.github.viewmodel.DetailViewModel
+import com.artworkspace.github.ui.viewmodel.DetailViewModel
+import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
+import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
