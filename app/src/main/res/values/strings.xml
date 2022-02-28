@@ -18,4 +18,6 @@
     <string name="site_dummy">mysite.com</string>
     <string name="no_users_found">No users found.</string>
     <string name="user_profile_picture">User Profile Picture</string>
+    <string name="setting">Setting</string>
+    <string name="favorite">Favorite</string>
 </resources>

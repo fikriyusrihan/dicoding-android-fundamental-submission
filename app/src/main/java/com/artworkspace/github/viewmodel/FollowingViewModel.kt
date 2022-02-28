@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.artworkspace.github.Utils
+import com.artworkspace.github.utils.Utils
 import com.artworkspace.github.model.SimpleUser
 import com.artworkspace.github.repository.ApiConfig
 import retrofit2.Call

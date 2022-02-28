@@ -9,8 +9,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
-import com.artworkspace.github.Utils.Companion.setAndVisible
-import com.artworkspace.github.Utils.Companion.setImageGlide
+import com.artworkspace.github.utils.Utils.Companion.setAndVisible
+import com.artworkspace.github.utils.Utils.Companion.setImageGlide
 import com.artworkspace.github.adapter.SectionPagerAdapter
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.model.User

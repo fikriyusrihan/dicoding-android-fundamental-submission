@@ -3,7 +3,7 @@ package com.artworkspace.github.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.artworkspace.github.Utils.Companion.setImageGlide
+import com.artworkspace.github.utils.Utils.Companion.setImageGlide
 import com.artworkspace.github.databinding.UserCardBinding
 import com.artworkspace.github.model.SimpleUser
 

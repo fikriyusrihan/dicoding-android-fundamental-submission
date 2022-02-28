@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.artworkspace.github.Utils.Companion.TOKEN
+import com.artworkspace.github.utils.Utils.Companion.TOKEN
 import com.artworkspace.github.model.User
 import com.artworkspace.github.repository.ApiConfig
 import retrofit2.Call
