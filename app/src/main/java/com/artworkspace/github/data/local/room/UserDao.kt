@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.artworkspace.github.data.local.entity.User
 
+@Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(user: User)
@@ -15,5 +16,5 @@ interface UserDao {
     suspend fun delete(user: User)
 
     @Query("SELECT * FROM user ORDER BY id ASC")
-    suspend fun getAllUsers(): LiveData<List<User>>
+    fun getAllUsers(): LiveData<List<User>>
 }
