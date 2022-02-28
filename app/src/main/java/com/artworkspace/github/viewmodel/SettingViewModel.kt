@@ -8,7 +8,8 @@ import com.artworkspace.github.SettingPreferences
 import kotlinx.coroutines.launch
 
 class SettingViewModel(private val pref: SettingPreferences) : ViewModel() {
-    fun getThemeSettings(): LiveData<Boolean> {
+
+    fun getThemeSetting(): LiveData<Boolean> {
         return pref.getThemeSetting().asLiveData()
     }
 

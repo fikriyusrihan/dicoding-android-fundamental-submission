@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -33,6 +34,13 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         val pref = SettingPreferences.getInstance(dataStore)
         settingViewModel =
             ViewModelProvider(this, ViewModelFactory(pref))[SettingViewModel::class.java]
+
+        settingViewModel.getThemeSetting().observe(this) { isDarkModeActive ->
+            if (isDarkModeActive) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+            binding.switchDarkMode.isChecked = isDarkModeActive
+        }
 
         binding.switchDarkMode.setOnCheckedChangeListener(this)
     }

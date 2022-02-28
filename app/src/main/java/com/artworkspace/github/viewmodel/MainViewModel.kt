@@ -4,15 +4,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.artworkspace.github.utils.Utils.Companion.TOKEN
+import androidx.lifecycle.asLiveData
+import com.artworkspace.github.SettingPreferences
 import com.artworkspace.github.model.ResponseSearch
 import com.artworkspace.github.model.SimpleUser
 import com.artworkspace.github.repository.ApiConfig
+import com.artworkspace.github.utils.Utils.Companion.TOKEN
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel: ViewModel() {
+class MainViewModel(private val preferences: SettingPreferences) : ViewModel() {
 
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
@@ -25,6 +27,10 @@ class MainViewModel: ViewModel() {
 
     init {
         findUser("\"\"")
+    }
+
+    fun getThemeSetting(): LiveData<Boolean> {
+        return preferences.getThemeSetting().asLiveData()
     }
 
     /**
