@@ -20,4 +20,6 @@
     <string name="user_profile_picture">User Profile Picture</string>
     <string name="setting">Setting</string>
     <string name="favorite">Favorite</string>
+    <string name="theme">Theme</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>

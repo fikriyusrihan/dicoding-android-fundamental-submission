@@ -80,7 +80,9 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show()
             }
             R.id.setting -> {
-                Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show()
+                Intent(this@MainActivity, SettingActivity::class.java).also {
+                    startActivity(it)
+                }
             }
         }
         return super.onOptionsItemSelected(item)
