@@ -15,15 +15,13 @@ import com.artworkspace.github.databinding.ActivitySettingBinding
 import com.artworkspace.github.ui.viewmodel.SettingViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
 
     private var _binding: ActivitySettingBinding? = null
     private val binding get() = _binding!!
 
     private val settingViewModel: SettingViewModel by viewModels {
-        ViewModelFactory.getInstance(this, dataStore)
+        ViewModelFactory.getInstance(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

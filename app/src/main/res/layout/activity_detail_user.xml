@@ -279,4 +279,13 @@
         android:layout_gravity="center_vertical|center_horizontal"
         android:visibility="visible" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/favorite"
+        android:src="@drawable/ic_baseline_favorite_border_24" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

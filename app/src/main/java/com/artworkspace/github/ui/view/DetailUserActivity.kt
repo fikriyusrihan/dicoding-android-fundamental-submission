@@ -1,5 +1,6 @@
 package com.artworkspace.github.ui.view
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,12 +8,17 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.SectionPagerAdapter
+import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.ui.viewmodel.DetailViewModel
+import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
 import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
@@ -25,8 +31,11 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
     private var username: String? = null
     private var profileUrl: String? = null
+    private var userDetail: UserEntity? = null
 
-    private val detailViewModel by viewModels<DetailViewModel>()
+    private val detailViewModel by viewModels<DetailViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +50,14 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         detailViewModel.user.observe(this) { user ->
             if (user != null) {
                 parseUserDetail(user)
+
+                val userEntity = UserEntity(
+                    user.login,
+                    user.avatarUrl,
+                    false
+                )
+
+                userDetail = userEntity
                 profileUrl = user.htmlUrl
             }
         }
@@ -58,6 +75,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         binding.btnOpen.setOnClickListener(this)
+        binding.fabFavorite.setOnClickListener(this)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -73,6 +91,9 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 }.also {
                     startActivity(it)
                 }
+            }
+            R.id.fab_favorite -> {
+                userDetail?.let { detailViewModel.saveAsFavorite(it) }
             }
         }
     }
@@ -142,12 +163,14 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 pbLoading.visibility = View.VISIBLE
                 appBarLayout.visibility = View.INVISIBLE
                 viewPager.visibility = View.INVISIBLE
+                fabFavorite.visibility = View.GONE
             }
         } else {
             binding.apply {
                 pbLoading.visibility = View.GONE
                 appBarLayout.visibility = View.VISIBLE
                 viewPager.visibility = View.VISIBLE
+                fabFavorite.visibility = View.VISIBLE
             }
         }
     }

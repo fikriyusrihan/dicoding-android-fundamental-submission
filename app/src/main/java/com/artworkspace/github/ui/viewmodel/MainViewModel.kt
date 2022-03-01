@@ -30,6 +30,7 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun getThemeSetting(): LiveData<Boolean> = repository.getThemeSetting()
 
+
     /**
      * Search GitHub user
      *
@@ -62,7 +63,7 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
                     }
 
                 })
-        }
+            }
     }
 
     companion object {

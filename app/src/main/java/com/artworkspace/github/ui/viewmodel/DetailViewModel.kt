@@ -4,14 +4,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.artworkspace.github.BuildConfig
+import com.artworkspace.github.data.UserRepository
+import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.data.remote.retrofit.ApiConfig
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailViewModel : ViewModel() {
+class DetailViewModel(private val repository: UserRepository) : ViewModel() {
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -23,6 +27,12 @@ class DetailViewModel : ViewModel() {
 
     private val _user = MutableLiveData<User?>(null)
     val user: LiveData<User?> = _user
+
+    fun saveAsFavorite(user: UserEntity) {
+        viewModelScope.launch {
+            repository.saveUserAsFavorite(user)
+        }
+    }
 
     /**
      *  Get user detail information

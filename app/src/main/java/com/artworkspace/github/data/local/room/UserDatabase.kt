@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.artworkspace.github.data.local.entity.User
+import com.artworkspace.github.data.local.entity.UserEntity
 
-@Database(entities = [User::class], version = 1, exportSchema = false)
+@Database(entities = [UserEntity::class], version = 1, exportSchema = false)
 abstract class UserDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 

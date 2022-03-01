@@ -18,14 +18,11 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.ListUserAdapter
-import com.artworkspace.github.data.SettingPreferences
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.ui.viewmodel.MainViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
-
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val binding get() = _binding!!
 
     private val mainViewModel: MainViewModel by viewModels {
-        ViewModelFactory.getInstance(this, dataStore)
+        ViewModelFactory.getInstance(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.isError.observe(this) { error ->
             if (error) errorOccurred()
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -145,7 +143,8 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
         }
 
-        listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
+        listUserAdapter.setOnItemClickCallback(object :
+            ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(user: SimpleUser) {
                 goToDetailUser(user)
             }
