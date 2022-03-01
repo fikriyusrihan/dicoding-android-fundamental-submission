@@ -1,5 +1,7 @@
 package com.artworkspace.github.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import com.artworkspace.github.BuildConfig
 import com.artworkspace.github.data.local.room.UserDao
 import com.artworkspace.github.data.remote.retrofit.ApiService
@@ -9,6 +11,14 @@ class UserRepository private constructor(
     private val userDao: UserDao,
     private val preferences: SettingPreferences
 ) {
+
+    fun getThemeSetting(): LiveData<Boolean> {
+        return preferences.getThemeSetting().asLiveData()
+    }
+
+    suspend fun saveThemeSetting(isDarkModeActive: Boolean) {
+        preferences.saveThemeSetting(isDarkModeActive)
+    }
 
     companion object {
         private const val API_TOKEN = "Bearer ${BuildConfig.API_KEY}"

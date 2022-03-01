@@ -4,9 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import com.artworkspace.github.BuildConfig
-import com.artworkspace.github.data.SettingPreferences
+import com.artworkspace.github.data.UserRepository
 import com.artworkspace.github.data.remote.response.ResponseSearch
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.data.remote.retrofit.ApiConfig
@@ -14,7 +13,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel(private val preferences: SettingPreferences) : ViewModel() {
+class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
@@ -29,9 +28,7 @@ class MainViewModel(private val preferences: SettingPreferences) : ViewModel() {
         findUser("\"\"")
     }
 
-    fun getThemeSetting(): LiveData<Boolean> {
-        return preferences.getThemeSetting().asLiveData()
-    }
+    fun getThemeSetting(): LiveData<Boolean> = repository.getThemeSetting()
 
     /**
      * Search GitHub user

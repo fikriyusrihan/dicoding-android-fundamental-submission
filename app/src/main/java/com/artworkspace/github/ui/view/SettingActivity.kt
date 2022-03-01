@@ -3,12 +3,12 @@ package com.artworkspace.github.ui.view
 import android.content.Context
 import android.os.Bundle
 import android.widget.CompoundButton
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.artworkspace.github.R
 import com.artworkspace.github.data.SettingPreferences
 import com.artworkspace.github.databinding.ActivitySettingBinding
@@ -22,7 +22,9 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
     private var _binding: ActivitySettingBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var settingViewModel: SettingViewModel
+    private val settingViewModel: SettingViewModel by viewModels {
+        ViewModelFactory.getInstance(this, dataStore)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +32,6 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         _binding = ActivitySettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setToolbar()
-
-        val pref = SettingPreferences.getInstance(dataStore)
-        settingViewModel =
-            ViewModelProvider(this, ViewModelFactory(pref))[SettingViewModel::class.java]
 
         settingViewModel.getThemeSetting().observe(this) { isDarkModeActive ->
             if (isDarkModeActive) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
