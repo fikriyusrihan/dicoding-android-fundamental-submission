@@ -43,7 +43,7 @@ class DetailViewModel(private val repository: UserRepository) : ViewModel() {
      *  Get user detail information
      *
      *  @param username GitHub username
-     *  @return Unit
+     *  @return LiveData<Result<User>>
      */
     fun getUserDetail(username: String) = repository.getUserDetail(username)
 }

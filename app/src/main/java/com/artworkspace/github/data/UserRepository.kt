@@ -21,7 +21,7 @@ class UserRepository private constructor(
      * Search GitHub user with API
      *
      * @param q GitHub username query
-     * @return Unit
+     * @return LiveData<Result<ArrayList<SimpleUser>>>
      */
     fun searchUserByUsername(q: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
         emit(Result.Loading)
@@ -38,7 +38,7 @@ class UserRepository private constructor(
      *  Get following information of an user from API
      *
      *  @param id GitHub username
-     *  @return Unit
+     *  @return LiveData<Result<ArrayList<SimpleUser>>>
      */
     fun getUserFollowing(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
         emit(Result.Loading)
@@ -55,7 +55,7 @@ class UserRepository private constructor(
      *  Get followers information of an user from API
      *
      *  @param id GitHub username
-     *  @return Unit
+     *  @return LiveData<Result<ArrayList<SimpleUser>>>
      */
     fun getUserFollowers(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
         emit(Result.Loading)
@@ -72,7 +72,7 @@ class UserRepository private constructor(
      *  Get user detail information from API
      *
      *  @param id GitHub username
-     *  @return Unit
+     *  @return LiveData<Result<User>>
      */
     fun getUserDetail(id: String): LiveData<Result<User>> = liveData {
         emit(Result.Loading)

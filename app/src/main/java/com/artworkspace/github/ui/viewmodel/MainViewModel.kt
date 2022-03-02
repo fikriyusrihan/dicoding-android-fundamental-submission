@@ -38,7 +38,7 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
      * Search GitHub user
      *
      * @param query GitHub username
-     * @return Unit
+     * @return LiveData<Result<ArrayList<SimpleUser>
      */
     fun searchUserByUsername(query: String) = repository.searchUserByUsername(query)
 }

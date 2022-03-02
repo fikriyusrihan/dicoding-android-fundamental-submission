@@ -9,7 +9,7 @@ class FollowingViewModel(private val repository: UserRepository) : ViewModel() {
      *  Get following information of an user
      *
      *  @param username GitHub username
-     *  @return Unit
+     *  @return LiveData<Result<ArrayList<SimpleUser>
      */
     fun getUserFollowing(username: String) = repository.getUserFollowing(username)
 }

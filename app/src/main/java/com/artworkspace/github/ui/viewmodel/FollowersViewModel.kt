@@ -9,7 +9,7 @@ class FollowersViewModel(private val repository: UserRepository) : ViewModel() {
      *  Get followers information of an user
      *
      *  @param username GitHub username
-     *  @return Unit
+     *  @return LiveData<Result<ArrayList<SimpleUser>
      */
     fun getUserFollowers(username: String) = repository.getUserFollowers(username)
 }
