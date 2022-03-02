@@ -10,11 +10,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.ListUserAdapter
+import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
@@ -39,21 +39,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarHome)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        mainViewModel.getThemeSetting().observe(this) { isDarkModeActive ->
-            if (isDarkModeActive) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-
-        mainViewModel.simpleUsers.observe(this) {
-            showSearchingResult(it)
-        }
-
-        mainViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
-        mainViewModel.isError.observe(this) { error ->
-            if (error) errorOccurred()
+        mainViewModel.getLastSearchQuery().observe(this) {
+            searchUser(it)
         }
 
     }
@@ -70,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             queryHint = getString(R.string.github_username)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    mainViewModel.findUser(query ?: "")
+                    searchUser(query ?: "")
                     clearFocus()
                     return true
                 }
@@ -103,6 +90,23 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
+    }
+
+    private fun searchUser(query: String) {
+        mainViewModel.saveLastSearchQuery(query)
+        mainViewModel.searchUserByUsername(query).observe(this) { result ->
+            when (result) {
+                is Result.Loading -> showLoading(true)
+                is Result.Error -> {
+                    errorOccurred()
+                    showLoading(false)
+                }
+                is Result.Success -> {
+                    showSearchingResult(result.data)
+                    showLoading(false)
+                }
+            }
+        }
     }
 
     /**

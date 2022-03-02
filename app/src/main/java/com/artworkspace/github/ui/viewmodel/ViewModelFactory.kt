@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.artworkspace.github.data.UserRepository
 import com.artworkspace.github.di.Injection
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "application")
 
 class ViewModelFactory(private val userRepository: UserRepository) :
     ViewModelProvider.NewInstanceFactory() {

@@ -18,10 +18,10 @@ interface ApiService {
      * @return Call<ResponseSearch>
      */
     @GET("search/users")
-    fun searchUsername(
+    suspend fun searchUsername(
         @Header("Authorization") token: String,
         @Query("q") q: String
-    ): Call<ResponseSearch>
+    ): ResponseSearch
 
 
     /**

@@ -14,8 +14,19 @@ import com.artworkspace.github.data.remote.retrofit.ApiService
 class UserRepository private constructor(
     private val apiService: ApiService,
     private val userDao: UserDao,
-    private val preferences: SettingPreferences
+    private val preferences: AppPreferences
 ) {
+
+    fun searchUserByUsername(q: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val users = apiService.searchUsername(token = API_TOKEN, q).items
+            emit(Result.Success(users))
+        } catch (e: Exception) {
+            Log.d(TAG, "searchUserByUsername: ${e.message.toString()}")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
 
     fun getUserFollowing(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
         emit(Result.Loading)
@@ -24,6 +35,7 @@ class UserRepository private constructor(
             emit(Result.Success(users))
         } catch (e: Exception) {
             Log.d(TAG, "getUserFollowing: ${e.message.toString()}")
+            emit(Result.Error(e.message.toString()))
         }
     }
 
@@ -34,6 +46,7 @@ class UserRepository private constructor(
             emit(Result.Success(users))
         } catch (e: Exception) {
             Log.d(TAG, "getUserFollowers: ${e.message.toString()}")
+            emit(Result.Error(e.message.toString()))
         }
     }
 
@@ -83,6 +96,14 @@ class UserRepository private constructor(
         userDao.insert(user)
     }
 
+    fun getLastSearchQuery(): LiveData<String> {
+        return preferences.getLastSearchQuery().asLiveData()
+    }
+
+    suspend fun saveLastSearchQuery(query: String) {
+        preferences.saveLastSearchQuery(query)
+    }
+
     /**
      * Get theme setting for dark mode state from DataStore
      *
@@ -110,7 +131,7 @@ class UserRepository private constructor(
         fun getInstance(
             apiService: ApiService,
             userDao: UserDao,
-            preferences: SettingPreferences
+            preferences: AppPreferences
         ): UserRepository {
             return INSTANCE ?: synchronized(this) {
                 UserRepository(apiService, userDao, preferences).also {
