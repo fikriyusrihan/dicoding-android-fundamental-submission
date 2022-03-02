@@ -17,6 +17,12 @@ class UserRepository private constructor(
     private val preferences: AppPreferences
 ) {
 
+    /**
+     * Search GitHub user with API
+     *
+     * @param q GitHub username query
+     * @return Unit
+     */
     fun searchUserByUsername(q: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
         emit(Result.Loading)
         try {
@@ -28,6 +34,12 @@ class UserRepository private constructor(
         }
     }
 
+    /**
+     *  Get following information of an user from API
+     *
+     *  @param id GitHub username
+     *  @return Unit
+     */
     fun getUserFollowing(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
         emit(Result.Loading)
         try {
@@ -39,6 +51,12 @@ class UserRepository private constructor(
         }
     }
 
+    /**
+     *  Get followers information of an user from API
+     *
+     *  @param id GitHub username
+     *  @return Unit
+     */
     fun getUserFollowers(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
         emit(Result.Loading)
         try {
@@ -50,6 +68,12 @@ class UserRepository private constructor(
         }
     }
 
+    /**
+     *  Get user detail information from API
+     *
+     *  @param id GitHub username
+     *  @return Unit
+     */
     fun getUserDetail(id: String): LiveData<Result<User>> = liveData {
         emit(Result.Loading)
         try {
@@ -96,10 +120,20 @@ class UserRepository private constructor(
         userDao.insert(user)
     }
 
+    /**
+     * Get last search query from DataStore
+     *
+     * @return LiveData<String>
+     */
     fun getLastSearchQuery(): LiveData<String> {
         return preferences.getLastSearchQuery().asLiveData()
     }
 
+    /**
+     * Saving last search query to DataStore
+     *
+     * @param query Search query
+     */
     suspend fun saveLastSearchQuery(query: String) {
         preferences.saveLastSearchQuery(query)
     }

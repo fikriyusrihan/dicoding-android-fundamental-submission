@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
@@ -41,6 +42,11 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.getLastSearchQuery().observe(this) {
             searchUser(it)
+        }
+
+        mainViewModel.getThemeSetting().observe(this) {
+            if (it) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
     }
@@ -92,6 +98,11 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    /**
+     * Search user by username, this function will save the query first and then doing user search
+     *
+     * @param query Username
+     */
     private fun searchUser(query: String) {
         mainViewModel.saveLastSearchQuery(query)
         mainViewModel.searchUserByUsername(query).observe(this) { result ->

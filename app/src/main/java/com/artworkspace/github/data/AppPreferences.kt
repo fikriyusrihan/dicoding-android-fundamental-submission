@@ -10,12 +10,22 @@ import kotlinx.coroutines.flow.map
 
 class AppPreferences private constructor(private val dataStore: DataStore<Preferences>) {
 
+    /**
+     * Get last search query from DataStore
+     *
+     * @return Flow<String>
+     */
     fun getLastSearchQuery(): Flow<String> {
         return dataStore.data.map { preferences ->
             preferences[QUERY_KEY] ?: "\"\""
         }
     }
 
+    /**
+     * Save last search query to DataStore
+     *
+     * @param query Last search query
+     */
     suspend fun saveLastSearchQuery(query: String) {
         dataStore.edit { preferences ->
             preferences[QUERY_KEY] = query

@@ -8,8 +8,18 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
+    /**
+     * Get last search query in search view
+     *
+     * @return LiveData<String>
+     */
     fun getLastSearchQuery(): LiveData<String> = repository.getLastSearchQuery()
 
+    /**
+     * Saving last search query in search view
+     *
+     * @param query Search query
+     */
     fun saveLastSearchQuery(query: String) {
         viewModelScope.launch {
             repository.saveLastSearchQuery(query)
