@@ -284,6 +284,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
+        app:tint="?attr/colorOnPrimary"
         android:layout_margin="16dp"
         android:contentDescription="@string/favorite"
         android:src="@drawable/ic_baseline_favorite_border_24" />
