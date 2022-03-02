@@ -21,6 +21,7 @@ import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.ui.viewmodel.MainViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import com.artworkspace.github.utils.EspressoIdlingResource
 
 class MainActivity : AppCompatActivity() {
 
@@ -104,6 +105,8 @@ class MainActivity : AppCompatActivity() {
      * @param query Username
      */
     private fun searchUser(query: String) {
+        EspressoIdlingResource.increment()
+
         mainViewModel.saveLastSearchQuery(query)
         mainViewModel.searchUserByUsername(query).observe(this) { result ->
             when (result) {
@@ -136,8 +139,13 @@ class MainActivity : AppCompatActivity() {
      * @return Unit
      */
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) binding.pbLoading.visibility = View.VISIBLE
-        else binding.pbLoading.visibility = View.GONE
+        if (isLoading) {
+            binding.pbLoading.visibility = View.VISIBLE
+            binding.rvUsers.visibility = View.GONE
+        } else {
+            binding.pbLoading.visibility = View.GONE
+            binding.rvUsers.visibility = View.VISIBLE
+        }
     }
 
     /**
@@ -164,6 +172,8 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+        EspressoIdlingResource.decrement()
     }
 
     /**

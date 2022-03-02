@@ -12,6 +12,7 @@ import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityFavoriteBinding
 import com.artworkspace.github.ui.viewmodel.FavoriteViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import com.artworkspace.github.utils.EspressoIdlingResource
 
 
 class FavoriteActivity : AppCompatActivity() {
@@ -29,6 +30,7 @@ class FavoriteActivity : AppCompatActivity() {
         setToolbar(getString(R.string.favorite))
 
         favoriteViewModel.getFavoriteUsers().observe(this) { users ->
+            EspressoIdlingResource.increment()
             showFavoriteUsers(users)
         }
     }
@@ -71,6 +73,8 @@ class FavoriteActivity : AppCompatActivity() {
             }
 
         })
+
+        EspressoIdlingResource.decrement()
     }
 
     /**

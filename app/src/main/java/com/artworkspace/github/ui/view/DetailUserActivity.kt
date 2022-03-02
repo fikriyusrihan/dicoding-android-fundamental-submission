@@ -16,6 +16,7 @@ import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.ui.viewmodel.DetailViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import com.artworkspace.github.utils.EspressoIdlingResource
 import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
 import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
@@ -188,6 +189,8 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 viewPager.visibility = View.INVISIBLE
                 fabFavorite.visibility = View.GONE
             }
+
+            EspressoIdlingResource.increment()
         } else {
             binding.apply {
                 pbLoading.visibility = View.GONE
@@ -195,6 +198,8 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 viewPager.visibility = View.VISIBLE
                 fabFavorite.visibility = View.VISIBLE
             }
+
+            EspressoIdlingResource.decrement()
         }
     }
 
