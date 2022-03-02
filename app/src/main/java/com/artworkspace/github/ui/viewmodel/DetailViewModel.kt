@@ -34,6 +34,14 @@ class DetailViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
+    fun deleteFromFavorite(user: UserEntity) {
+        viewModelScope.launch {
+            repository.deleteFromFavorite(user)
+        }
+    }
+
+    fun isFavoriteUser(id: String): LiveData<Boolean> = repository.isFavoriteUser(id)
+
     /**
      *  Get user detail information
      *

@@ -14,7 +14,15 @@ class UserRepository private constructor(
     private val preferences: SettingPreferences
 ) {
 
+    fun isFavoriteUser(id: String): LiveData<Boolean> = liveData {
+        emit(userDao.isFavoriteUser(id))
+    }
+
     fun getAllFavoriteUsers(): LiveData<List<UserEntity>> = userDao.getAllUsers()
+
+    suspend fun deleteFromFavorite(user: UserEntity) {
+        userDao.delete(user)
+    }
 
     suspend fun saveUserAsFavorite(user: UserEntity) {
         userDao.insert(user)

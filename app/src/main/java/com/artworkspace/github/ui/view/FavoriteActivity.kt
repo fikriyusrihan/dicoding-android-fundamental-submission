@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.ListUserAdapter
+import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityFavoriteBinding
 import com.artworkspace.github.ui.viewmodel.FavoriteViewModel
@@ -28,18 +29,7 @@ class FavoriteActivity : AppCompatActivity() {
         setToolbar()
 
         favoriteViewModel.getFavoriteUsers().observe(this) { users ->
-            val listUsers = ArrayList<SimpleUser>()
-
-            users.forEach { user ->
-                val data = SimpleUser(
-                    user.avatarUrl,
-                    user.id
-                )
-
-                listUsers.add(data)
-            }
-
-            showFavoriteUsers(listUsers)
+            showFavoriteUsers(users)
         }
     }
 
@@ -48,8 +38,19 @@ class FavoriteActivity : AppCompatActivity() {
         return true
     }
 
-    private fun showFavoriteUsers(users: ArrayList<SimpleUser>) {
-        val listUserAdapter = ListUserAdapter(users)
+    private fun showFavoriteUsers(users: List<UserEntity>) {
+        val listUsers = ArrayList<SimpleUser>()
+
+        users.forEach { user ->
+            val data = SimpleUser(
+                user.avatarUrl,
+                user.id
+            )
+
+            listUsers.add(data)
+        }
+
+        val listUserAdapter = ListUserAdapter(listUsers)
 
         binding.rvFavorite.apply {
             layoutManager = LinearLayoutManager(this@FavoriteActivity)

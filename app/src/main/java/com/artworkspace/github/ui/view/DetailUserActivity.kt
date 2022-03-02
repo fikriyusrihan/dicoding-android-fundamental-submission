@@ -1,6 +1,5 @@
 package com.artworkspace.github.ui.view
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,9 +7,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.SectionPagerAdapter
@@ -32,6 +28,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private var username: String? = null
     private var profileUrl: String? = null
     private var userDetail: UserEntity? = null
+    private var isFavorite: Boolean = false
 
     private val detailViewModel by viewModels<DetailViewModel> {
         ViewModelFactory.getInstance(this)
@@ -54,7 +51,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 val userEntity = UserEntity(
                     user.login,
                     user.avatarUrl,
-                    false
+                    true
                 )
 
                 userDetail = userEntity
@@ -72,6 +69,11 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
         detailViewModel.callCounter.observe(this) { counter ->
             if (counter < 1) detailViewModel.getUserDetail(username!!)
+        }
+
+        detailViewModel.isFavoriteUser(username ?: "").observe(this) {
+            isFavoriteUser(it)
+            isFavorite = it
         }
 
         binding.btnOpen.setOnClickListener(this)
@@ -93,7 +95,15 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.fab_favorite -> {
-                userDetail?.let { detailViewModel.saveAsFavorite(it) }
+                if (isFavorite) {
+                    userDetail?.let { detailViewModel.deleteFromFavorite(it) }
+                    isFavoriteUser(false)
+                    Toast.makeText(this, "User deleted from favorite", Toast.LENGTH_SHORT).show()
+                } else {
+                    userDetail?.let { detailViewModel.saveAsFavorite(it) }
+                    isFavoriteUser(true)
+                    Toast.makeText(this, "User added to favorite", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -104,6 +114,14 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         profileUrl = null
 
         super.onDestroy()
+    }
+
+    private fun isFavoriteUser(favorite: Boolean) {
+        if (favorite) {
+            binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        } else {
+            binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
     }
 
     /**
