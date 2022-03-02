@@ -2,6 +2,7 @@ package com.artworkspace.github.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import com.artworkspace.github.BuildConfig
 import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.local.room.UserDao
@@ -12,6 +13,8 @@ class UserRepository private constructor(
     private val userDao: UserDao,
     private val preferences: SettingPreferences
 ) {
+
+    fun getAllFavoriteUsers(): LiveData<List<UserEntity>> = userDao.getAllUsers()
 
     suspend fun saveUserAsFavorite(user: UserEntity) {
         userDao.insert(user)

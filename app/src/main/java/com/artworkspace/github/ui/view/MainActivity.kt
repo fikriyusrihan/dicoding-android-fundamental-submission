@@ -12,9 +12,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.ListUserAdapter
@@ -90,7 +87,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.favorite -> {
-                Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show()
+                Intent(this@MainActivity, FavoriteActivity::class.java).also {
+                    startActivity(it)
+                }
             }
             R.id.setting -> {
                 Intent(this@MainActivity, SettingActivity::class.java).also {
