@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.DetailUserActivity">
+    tools:context=".ui.view.DetailUserActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -278,5 +278,15 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical|center_horizontal"
         android:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:tint="?attr/colorOnPrimary"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/favorite"
+        android:src="@drawable/ic_baseline_favorite_border_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

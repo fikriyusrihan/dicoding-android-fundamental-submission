@@ -1,4 +1,4 @@
-package com.artworkspace.github.ui
+package com.artworkspace.github.ui.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.adapter.SectionPagerAdapter.Companion.ARGS_USERNAME
+import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.FragmentFollowersBinding
-import com.artworkspace.github.model.SimpleUser
-import com.artworkspace.github.viewmodel.FollowersViewModel
+import com.artworkspace.github.ui.viewmodel.FollowersViewModel
 
 class FollowersFragment : Fragment() {
 

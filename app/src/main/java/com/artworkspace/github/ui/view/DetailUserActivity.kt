@@ -1,4 +1,4 @@
-package com.artworkspace.github.ui
+package com.artworkspace.github.ui.view
 
 import android.content.Intent
 import android.net.Uri
@@ -9,12 +9,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
-import com.artworkspace.github.utils.Utils.Companion.setAndVisible
-import com.artworkspace.github.utils.Utils.Companion.setImageGlide
 import com.artworkspace.github.adapter.SectionPagerAdapter
+import com.artworkspace.github.data.local.entity.UserEntity
+import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
-import com.artworkspace.github.model.User
-import com.artworkspace.github.viewmodel.DetailViewModel
+import com.artworkspace.github.ui.viewmodel.DetailViewModel
+import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
+import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -25,8 +27,12 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
     private var username: String? = null
     private var profileUrl: String? = null
+    private var userDetail: UserEntity? = null
+    private var isFavorite: Boolean = false
 
-    private val detailViewModel by viewModels<DetailViewModel>()
+    private val detailViewModel by viewModels<DetailViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +42,19 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
         setContentView(binding.root)
         setViewPager()
-        setToolbar()
+        setToolbar(getString(R.string.profile))
 
         detailViewModel.user.observe(this) { user ->
             if (user != null) {
                 parseUserDetail(user)
+
+                val userEntity = UserEntity(
+                    user.login,
+                    user.avatarUrl,
+                    true
+                )
+
+                userDetail = userEntity
                 profileUrl = user.htmlUrl
             }
         }
@@ -57,7 +71,13 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             if (counter < 1) detailViewModel.getUserDetail(username!!)
         }
 
+        detailViewModel.isFavoriteUser(username ?: "").observe(this) {
+            isFavoriteUser(it)
+            isFavorite = it
+        }
+
         binding.btnOpen.setOnClickListener(this)
+        binding.fabFavorite.setOnClickListener(this)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -74,6 +94,17 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                     startActivity(it)
                 }
             }
+            R.id.fab_favorite -> {
+                if (isFavorite) {
+                    userDetail?.let { detailViewModel.deleteFromFavorite(it) }
+                    isFavoriteUser(false)
+                    Toast.makeText(this, "User deleted from favorite", Toast.LENGTH_SHORT).show()
+                } else {
+                    userDetail?.let { detailViewModel.saveAsFavorite(it) }
+                    isFavoriteUser(true)
+                    Toast.makeText(this, "User added to favorite", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -83,6 +114,19 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         profileUrl = null
 
         super.onDestroy()
+    }
+
+    /**
+     * Determine which icon to display in FAB
+     *
+     * @param favorite  Is this favorite user?
+     */
+    private fun isFavoriteUser(favorite: Boolean) {
+        if (favorite) {
+            binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        } else {
+            binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
     }
 
     /**
@@ -102,15 +146,16 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     /**
      * Setting up toolbar
      *
+     * @param title Toolbar title
      * @return Unit
      */
-    private fun setToolbar() {
+    private fun setToolbar(title: String) {
         setSupportActionBar(binding.toolbarDetail)
         binding.collapsingToolbar.isTitleEnabled = false
         supportActionBar?.apply {
             setDisplayShowHomeEnabled(true)
             setDisplayHomeAsUpEnabled(true)
-            title = getString(R.string.profile)
+            this.title = title
         }
     }
 
@@ -142,12 +187,14 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 pbLoading.visibility = View.VISIBLE
                 appBarLayout.visibility = View.INVISIBLE
                 viewPager.visibility = View.INVISIBLE
+                fabFavorite.visibility = View.GONE
             }
         } else {
             binding.apply {
                 pbLoading.visibility = View.GONE
                 appBarLayout.visibility = View.VISIBLE
                 viewPager.visibility = View.VISIBLE
+                fabFavorite.visibility = View.VISIBLE
             }
         }
     }

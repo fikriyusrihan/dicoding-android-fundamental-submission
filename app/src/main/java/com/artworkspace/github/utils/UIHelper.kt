@@ -3,15 +3,12 @@ package com.artworkspace.github.utils
 import android.content.Context
 import android.view.View
 import android.widget.TextView
-import com.artworkspace.github.BuildConfig
 import com.artworkspace.github.R
 import com.bumptech.glide.Glide
 import de.hdodenhof.circleimageview.CircleImageView
 
-class Utils {
+class UIHelper {
     companion object {
-        const val TOKEN = BuildConfig.API_KEY
-
         /**
          * Extension function to set CircleImageView using Glide
          *

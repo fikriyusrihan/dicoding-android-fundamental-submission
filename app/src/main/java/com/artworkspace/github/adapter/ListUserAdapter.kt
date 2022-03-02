@@ -3,9 +3,9 @@ package com.artworkspace.github.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.artworkspace.github.utils.Utils.Companion.setImageGlide
+import com.artworkspace.github.data.remote.response.SimpleUser
+import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.artworkspace.github.databinding.UserCardBinding
-import com.artworkspace.github.model.SimpleUser
 
 class ListUserAdapter(private val listUser: ArrayList<SimpleUser>) :
     RecyclerView.Adapter<ListUserAdapter.ListViewHolder>() {

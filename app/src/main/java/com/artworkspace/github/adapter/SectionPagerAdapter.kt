@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.artworkspace.github.ui.FollowersFragment
-import com.artworkspace.github.ui.FollowingFragment
+import com.artworkspace.github.ui.view.FollowersFragment
+import com.artworkspace.github.ui.view.FollowingFragment
 
 class SectionPagerAdapter(activity: AppCompatActivity, private val username: String) :
     FragmentStateAdapter(activity) {

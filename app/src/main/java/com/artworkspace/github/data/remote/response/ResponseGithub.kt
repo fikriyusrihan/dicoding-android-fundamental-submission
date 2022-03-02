@@ -1,4 +1,4 @@
-package com.artworkspace.github.model
+package com.artworkspace.github.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 

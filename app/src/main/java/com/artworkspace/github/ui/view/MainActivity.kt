@@ -1,4 +1,4 @@
-package com.artworkspace.github.ui
+package com.artworkspace.github.ui.view
 
 import android.app.SearchManager
 import android.content.Context
@@ -10,21 +10,25 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.ListUserAdapter
+import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityMainBinding
-import com.artworkspace.github.model.SimpleUser
-import com.artworkspace.github.ui.DetailUserActivity.Companion.EXTRA_DETAIL
-import com.artworkspace.github.viewmodel.MainViewModel
+import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
+import com.artworkspace.github.ui.viewmodel.MainViewModel
+import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val mainViewModel: MainViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbarHome)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        mainViewModel.getThemeSetting().observe(this) { isDarkModeActive ->
+            if (isDarkModeActive) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
 
         mainViewModel.simpleUsers.observe(this) {
             showSearchingResult(it)
@@ -46,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.isError.observe(this) { error ->
             if (error) errorOccurred()
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -77,7 +87,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.favorite -> {
-                Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show()
+                Intent(this@MainActivity, FavoriteActivity::class.java).also {
+                    startActivity(it)
+                }
             }
             R.id.setting -> {
                 Intent(this@MainActivity, SettingActivity::class.java).also {
@@ -130,7 +142,8 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
         }
 
-        listUserAdapter.setOnItemClickCallback(object : ListUserAdapter.OnItemClickCallback {
+        listUserAdapter.setOnItemClickCallback(object :
+            ListUserAdapter.OnItemClickCallback {
             override fun onItemClicked(user: SimpleUser) {
                 goToDetailUser(user)
             }
