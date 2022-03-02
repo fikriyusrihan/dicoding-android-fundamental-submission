@@ -26,7 +26,7 @@ class FavoriteActivity : AppCompatActivity() {
 
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setToolbar()
+        setToolbar(getString(R.string.favorite))
 
         favoriteViewModel.getFavoriteUsers().observe(this) { users ->
             showFavoriteUsers(users)
@@ -38,6 +38,12 @@ class FavoriteActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * Convert data type and display favorite users to the recycler view
+     *
+     * @param users List of favorite users
+     * @return Unit
+     */
     private fun showFavoriteUsers(users: List<UserEntity>) {
         val listUsers = ArrayList<SimpleUser>()
 
@@ -67,6 +73,12 @@ class FavoriteActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Go to detail page with selected user data
+     *
+     * @param user  Selected user
+     * @return Unit
+     */
     private fun goToDetailUser(user: SimpleUser) {
         Intent(this@FavoriteActivity, DetailUserActivity::class.java).apply {
             putExtra(DetailUserActivity.EXTRA_DETAIL, user.login)
@@ -75,12 +87,18 @@ class FavoriteActivity : AppCompatActivity() {
         }
     }
 
-    private fun setToolbar() {
+    /**
+     * Setting up toolbar
+     *
+     * @param title Toolbar title
+     * @return Unit
+     */
+    private fun setToolbar(title: String) {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayShowHomeEnabled(true)
             setDisplayHomeAsUpEnabled(true)
-            title = getString(R.string.favorite)
+            this.title = title
         }
     }
 }

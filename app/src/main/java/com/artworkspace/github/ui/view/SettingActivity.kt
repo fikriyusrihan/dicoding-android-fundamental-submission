@@ -1,16 +1,11 @@
 package com.artworkspace.github.ui.view
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.CompoundButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import com.artworkspace.github.R
-import com.artworkspace.github.data.SettingPreferences
 import com.artworkspace.github.databinding.ActivitySettingBinding
 import com.artworkspace.github.ui.viewmodel.SettingViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
@@ -29,7 +24,7 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
 
         _binding = ActivitySettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setToolbar()
+        setToolbar(getString(R.string.setting))
 
         settingViewModel.getThemeSetting().observe(this) { isDarkModeActive ->
             if (isDarkModeActive) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -57,12 +52,18 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         super.onDestroy()
     }
 
-    private fun setToolbar() {
+    /**
+     * Setting up toolbar
+     *
+     * @param title Toolbar title
+     * @return Unit
+     */
+    private fun setToolbar(title: String) {
         setSupportActionBar(binding.toolbarSetting)
         supportActionBar?.apply {
             setDisplayShowHomeEnabled(true)
             setDisplayHomeAsUpEnabled(true)
-            title = getString(R.string.setting)
+            this.title = title
         }
     }
 

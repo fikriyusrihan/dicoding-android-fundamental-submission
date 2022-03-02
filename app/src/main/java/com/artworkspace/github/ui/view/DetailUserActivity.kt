@@ -42,7 +42,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
         setContentView(binding.root)
         setViewPager()
-        setToolbar()
+        setToolbar(getString(R.string.profile))
 
         detailViewModel.user.observe(this) { user ->
             if (user != null) {
@@ -116,6 +116,11 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         super.onDestroy()
     }
 
+    /**
+     * Determine which icon to display in FAB
+     *
+     * @param favorite  Is this favorite user?
+     */
     private fun isFavoriteUser(favorite: Boolean) {
         if (favorite) {
             binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
@@ -141,15 +146,16 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     /**
      * Setting up toolbar
      *
+     * @param title Toolbar title
      * @return Unit
      */
-    private fun setToolbar() {
+    private fun setToolbar(title: String) {
         setSupportActionBar(binding.toolbarDetail)
         binding.collapsingToolbar.isTitleEnabled = false
         supportActionBar?.apply {
             setDisplayShowHomeEnabled(true)
             setDisplayHomeAsUpEnabled(true)
-            title = getString(R.string.profile)
+            this.title = title
         }
     }
 

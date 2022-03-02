@@ -28,6 +28,11 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
         findUser("\"\"")
     }
 
+    /**
+     * Get theme setting for dark mode from DataStore
+     *
+     * @return LiveData<Boolean>
+     */
     fun getThemeSetting(): LiveData<Boolean> = repository.getThemeSetting()
 
 

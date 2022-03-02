@@ -14,24 +14,55 @@ class UserRepository private constructor(
     private val preferences: SettingPreferences
 ) {
 
+    /**
+     * Determine this user is favorite or not
+     *
+     * @param id User id
+     * @return LiveData<Boolean>
+     */
     fun isFavoriteUser(id: String): LiveData<Boolean> = liveData {
         emit(userDao.isFavoriteUser(id))
     }
 
+    /**
+     * Get all favorite users from database
+     *
+     * @return LiveData<List<UserEntity>>
+     */
     fun getAllFavoriteUsers(): LiveData<List<UserEntity>> = userDao.getAllUsers()
 
+    /**
+     * Delete a favorite user from database
+     *
+     * @param user User to delete
+     */
     suspend fun deleteFromFavorite(user: UserEntity) {
         userDao.delete(user)
     }
 
+    /**
+     * Save user as favorite to database
+     *
+     * @param user User to save
+     */
     suspend fun saveUserAsFavorite(user: UserEntity) {
         userDao.insert(user)
     }
 
+    /**
+     * Get theme setting for dark mode state from DataStore
+     *
+     * @return LiveData<Boolean>
+     */
     fun getThemeSetting(): LiveData<Boolean> {
         return preferences.getThemeSetting().asLiveData()
     }
 
+    /**
+     * Save theme setting for dark mode state to DataStore
+     *
+     * @param isDarkModeActive Dark mode state to save
+     */
     suspend fun saveThemeSetting(isDarkModeActive: Boolean) {
         preferences.saveThemeSetting(isDarkModeActive)
     }

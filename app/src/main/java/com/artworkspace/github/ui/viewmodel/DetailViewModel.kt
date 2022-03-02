@@ -28,18 +28,34 @@ class DetailViewModel(private val repository: UserRepository) : ViewModel() {
     private val _user = MutableLiveData<User?>(null)
     val user: LiveData<User?> = _user
 
+    /**
+     * Save user to database as favorite user
+     *
+     * @param user New favorite user
+     */
     fun saveAsFavorite(user: UserEntity) {
         viewModelScope.launch {
             repository.saveUserAsFavorite(user)
         }
     }
 
+    /**
+     * Delete favorite user from database
+     *
+     * @param user User to delete
+     */
     fun deleteFromFavorite(user: UserEntity) {
         viewModelScope.launch {
             repository.deleteFromFavorite(user)
         }
     }
 
+    /**
+     * Determine this is favorite user or not
+     *
+     * @param id User id
+     * @return LiveData<Boolean>
+     */
     fun isFavoriteUser(id: String): LiveData<Boolean> = repository.isFavoriteUser(id)
 
     /**
