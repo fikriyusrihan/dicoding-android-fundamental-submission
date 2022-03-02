@@ -1,11 +1,13 @@
 package com.artworkspace.github.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.artworkspace.github.BuildConfig
 import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.local.room.UserDao
+import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.data.remote.retrofit.ApiService
 
 class UserRepository private constructor(
@@ -13,6 +15,17 @@ class UserRepository private constructor(
     private val userDao: UserDao,
     private val preferences: SettingPreferences
 ) {
+
+    fun getUserDetail(id: String): LiveData<Result<User>> = liveData {
+        emit(Result.Loading)
+        try {
+            val user = apiService.getUserDetail(token = API_TOKEN, id)
+            emit(Result.Success(user))
+        } catch (e: Exception) {
+            Log.d(TAG, "getUserDetail: ${e.message.toString()}")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
 
     /**
      * Determine this user is favorite or not
@@ -69,6 +82,7 @@ class UserRepository private constructor(
 
     companion object {
         private const val API_TOKEN = "Bearer ${BuildConfig.API_KEY}"
+        private val TAG = UserRepository::class.java.simpleName
 
         private var INSTANCE: UserRepository? = null
 

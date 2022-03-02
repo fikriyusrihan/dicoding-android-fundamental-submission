@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.SectionPagerAdapter
+import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
@@ -44,31 +45,56 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         setViewPager()
         setToolbar(getString(R.string.profile))
 
-        detailViewModel.user.observe(this) { user ->
-            if (user != null) {
-                parseUserDetail(user)
+//        detailViewModel.user.observe(this) { user ->
+//            if (user != null) {
+//                parseUserDetail(user)
+//
+//                val userEntity = UserEntity(
+//                    user.login,
+//                    user.avatarUrl,
+//                    true
+//                )
+//
+//                userDetail = userEntity
+//                profileUrl = user.htmlUrl
+//            }
+//        }
+//
+//        detailViewModel.isLoading.observe(this) {
+//            showLoading(it)
+//        }
+//
+//        detailViewModel.isError.observe(this) { error ->
+//            if (error) errorOccurred()
+//        }
 
-                val userEntity = UserEntity(
-                    user.login,
-                    user.avatarUrl,
-                    true
-                )
+//        detailViewModel.callCounter.observe(this) { counter ->
+//            if (counter < 1) detailViewModel.getUserDetail(username!!)
+//        }
 
-                userDetail = userEntity
-                profileUrl = user.htmlUrl
+        detailViewModel.getUserDetail(username!!).observe(this) { result ->
+            when (result) {
+                is Result.Loading -> showLoading(true)
+                is Result.Error -> {
+                    Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    showLoading(false)
+                }
+                is Result.Success -> {
+                    result.data.let {
+                        parseUserDetail(it)
+
+                        val userEntity = UserEntity(
+                            it.login,
+                            it.avatarUrl,
+                            true
+                        )
+
+                        userDetail = userEntity
+                        profileUrl = it.htmlUrl
+                    }
+                    showLoading(false)
+                }
             }
-        }
-
-        detailViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
-        detailViewModel.isError.observe(this) { error ->
-            if (error) errorOccurred()
-        }
-
-        detailViewModel.callCounter.observe(this) { counter ->
-            if (counter < 1) detailViewModel.getUserDetail(username!!)
         }
 
         detailViewModel.isFavoriteUser(username ?: "").observe(this) {
