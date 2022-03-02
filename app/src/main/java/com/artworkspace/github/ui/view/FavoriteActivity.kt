@@ -2,6 +2,7 @@ package com.artworkspace.github.ui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,6 +60,7 @@ class FavoriteActivity : AppCompatActivity() {
         }
 
         val listUserAdapter = ListUserAdapter(listUsers)
+        if (listUsers.size == 0) binding.tvMessage.visibility = View.VISIBLE
 
         binding.rvFavorite.apply {
             layoutManager = LinearLayoutManager(this@FavoriteActivity)
