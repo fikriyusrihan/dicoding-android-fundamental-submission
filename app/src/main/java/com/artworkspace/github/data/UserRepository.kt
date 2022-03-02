@@ -10,6 +10,7 @@ import com.artworkspace.github.data.local.room.UserDao
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.data.remote.retrofit.ApiService
+import kotlinx.coroutines.flow.Flow
 
 class UserRepository private constructor(
     private val apiService: ApiService,
@@ -143,9 +144,7 @@ class UserRepository private constructor(
      *
      * @return LiveData<Boolean>
      */
-    fun getThemeSetting(): LiveData<Boolean> {
-        return preferences.getThemeSetting().asLiveData()
-    }
+    fun getThemeSetting(): Flow<Boolean> = preferences.getThemeSetting()
 
     /**
      * Save theme setting for dark mode state to DataStore

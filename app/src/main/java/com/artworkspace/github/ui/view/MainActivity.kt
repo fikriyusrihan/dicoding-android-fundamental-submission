@@ -12,6 +12,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.ListUserAdapter
@@ -22,6 +25,8 @@ import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.ui.viewmodel.MainViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 import com.artworkspace.github.utils.EspressoIdlingResource
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,9 +50,15 @@ class MainActivity : AppCompatActivity() {
             searchUser(it)
         }
 
-        mainViewModel.getThemeSetting().observe(this) {
-            if (it) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    mainViewModel.themeSetting.collect { state ->
+                        if (state) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                }
+            }
         }
 
     }
