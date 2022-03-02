@@ -32,6 +32,9 @@ class ViewModelFactory(private val userRepository: UserRepository) :
             modelClass.isAssignableFrom(FollowersViewModel::class.java) -> {
                 FollowersViewModel(userRepository) as T
             }
+            modelClass.isAssignableFrom(FollowingViewModel::class.java) -> {
+                FollowingViewModel(userRepository) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
 

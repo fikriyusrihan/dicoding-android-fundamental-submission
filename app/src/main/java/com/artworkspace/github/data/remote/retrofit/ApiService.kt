@@ -60,8 +60,8 @@ interface ApiService {
      * @return Call<ArrayList<SimpleUser>>
      */
     @GET("users/{username}/following")
-    fun getUserFollowing(
+    suspend fun getUserFollowing(
         @Header("Authorization") token: String,
         @Path("username") username: String
-    ): Call<ArrayList<SimpleUser>>
+    ): ArrayList<SimpleUser>
 }

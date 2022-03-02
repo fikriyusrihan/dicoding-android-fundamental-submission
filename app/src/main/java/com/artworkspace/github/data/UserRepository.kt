@@ -17,6 +17,16 @@ class UserRepository private constructor(
     private val preferences: SettingPreferences
 ) {
 
+    fun getUserFollowing(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val users = apiService.getUserFollowing(token = API_TOKEN, id)
+            emit(Result.Success(users))
+        } catch (e: Exception) {
+            Log.d(TAG, "getUserFollowing: ${e.message.toString()}")
+        }
+    }
+
     fun getUserFollowers(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
         emit(Result.Loading)
         try {
