@@ -46,10 +46,10 @@ interface ApiService {
      * @return Call<ArrayList<SimpleUser>>
      */
     @GET("users/{username}/followers")
-    fun getUserFollowers(
+    suspend fun getUserFollowers(
         @Header("Authorization") token: String,
         @Path("username") username: String
-    ): Call<ArrayList<SimpleUser>>
+    ): ArrayList<SimpleUser>
 
 
     /**

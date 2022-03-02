@@ -7,6 +7,7 @@ import androidx.lifecycle.liveData
 import com.artworkspace.github.BuildConfig
 import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.local.room.UserDao
+import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.data.remote.retrofit.ApiService
 
@@ -15,6 +16,16 @@ class UserRepository private constructor(
     private val userDao: UserDao,
     private val preferences: SettingPreferences
 ) {
+
+    fun getUserFollowers(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
+        emit(Result.Loading)
+        try {
+            val users = apiService.getUserFollowers(token = API_TOKEN, id)
+            emit(Result.Success(users))
+        } catch (e: Exception) {
+            Log.d(TAG, "getUserFollowers: ${e.message.toString()}")
+        }
+    }
 
     fun getUserDetail(id: String): LiveData<Result<User>> = liveData {
         emit(Result.Loading)

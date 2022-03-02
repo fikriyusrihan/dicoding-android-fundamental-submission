@@ -29,7 +29,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private var username: String? = null
     private var profileUrl: String? = null
     private var userDetail: UserEntity? = null
-    private var isFavorite: Boolean = false
+    private var isFavorite: Boolean? = false
 
     private val detailViewModel by viewModels<DetailViewModel> {
         ViewModelFactory.getInstance(this)
@@ -45,39 +45,13 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         setViewPager()
         setToolbar(getString(R.string.profile))
 
-//        detailViewModel.user.observe(this) { user ->
-//            if (user != null) {
-//                parseUserDetail(user)
-//
-//                val userEntity = UserEntity(
-//                    user.login,
-//                    user.avatarUrl,
-//                    true
-//                )
-//
-//                userDetail = userEntity
-//                profileUrl = user.htmlUrl
-//            }
-//        }
-//
-//        detailViewModel.isLoading.observe(this) {
-//            showLoading(it)
-//        }
-//
-//        detailViewModel.isError.observe(this) { error ->
-//            if (error) errorOccurred()
-//        }
-
-//        detailViewModel.callCounter.observe(this) { counter ->
-//            if (counter < 1) detailViewModel.getUserDetail(username!!)
-//        }
-
         detailViewModel.getUserDetail(username!!).observe(this) { result ->
             when (result) {
                 is Result.Loading -> showLoading(true)
                 is Result.Error -> {
                     Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
                     showLoading(false)
+                    errorOccurred()
                 }
                 is Result.Success -> {
                     result.data.let {
@@ -121,7 +95,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.fab_favorite -> {
-                if (isFavorite) {
+                if (isFavorite == true) {
                     userDetail?.let { detailViewModel.deleteFromFavorite(it) }
                     isFavoriteUser(false)
                     Toast.makeText(this, "User deleted from favorite", Toast.LENGTH_SHORT).show()
@@ -138,7 +112,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         _binding = null
         username = null
         profileUrl = null
-
+        isFavorite = null
         super.onDestroy()
     }
 
@@ -166,7 +140,6 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             tabs.visibility = View.INVISIBLE
             viewPager.visibility = View.INVISIBLE
         }
-        Toast.makeText(this@DetailUserActivity, "An Error is Occurred", Toast.LENGTH_SHORT).show()
     }
 
     /**
