@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.adapter.SectionPagerAdapter.Companion.ARGS_USERNAME
@@ -15,6 +16,8 @@ import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.FragmentFollowingBinding
 import com.artworkspace.github.ui.viewmodel.FollowingViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class FollowingFragment : Fragment() {
 
@@ -30,28 +33,48 @@ class FollowingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFollowingBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val username = arguments?.getString(ARGS_USERNAME) ?: ""
-        followingViewModel.getUserFollowing(username).observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Result.Loading -> showLoading(true)
-                is Result.Error -> {
-                    showLoading(false)
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            launch {
+                followingViewModel.following.collect {
+                    onFollowingResultReceived(it)
                 }
-                is Result.Success -> {
-                    showFollowing(result.data)
-                    showLoading(false)
+            }
+            launch {
+                followingViewModel.isLoaded.collect { loaded ->
+                    if (!loaded) followingViewModel.getUserFollowing(username)
                 }
             }
         }
-
-
-        return binding.root
     }
 
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
+    }
+
+    /**
+     * Parsing data to UI based on result
+     *
+     * @param result Result from API
+     */
+    private fun onFollowingResultReceived(result: Result<ArrayList<SimpleUser>>) {
+        when (result) {
+            is Result.Loading -> showLoading(true)
+            is Result.Error -> {
+                showLoading(false)
+            }
+            is Result.Success -> {
+                showFollowing(result.data)
+                showLoading(false)
+            }
+        }
     }
 
     /**

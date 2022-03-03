@@ -40,9 +40,9 @@ class UserRepository private constructor(
      *  Get following information of an user from API
      *
      *  @param id GitHub username
-     *  @return LiveData<Result<ArrayList<SimpleUser>>>
+     *  @return Flow<Result<ArrayList<SimpleUser>>>
      */
-    fun getUserFollowing(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
+    fun getUserFollowing(id: String): Flow<Result<ArrayList<SimpleUser>>> = flow {
         emit(Result.Loading)
         try {
             val users = apiService.getUserFollowing(token = API_TOKEN, id)
@@ -57,7 +57,7 @@ class UserRepository private constructor(
      *  Get followers information of an user from API
      *
      *  @param id GitHub username
-     *  @return LiveData<Result<ArrayList<SimpleUser>>>
+     *  @return Flow<Result<ArrayList<SimpleUser>>>
      */
     fun getUserFollowers(id: String): Flow<Result<ArrayList<SimpleUser>>> = flow {
         emit(Result.Loading)
