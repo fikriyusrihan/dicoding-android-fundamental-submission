@@ -10,16 +10,20 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.adapter.ListUserAdapter
 import com.artworkspace.github.adapter.SectionPagerAdapter.Companion.ARGS_USERNAME
+import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.FragmentFollowingBinding
 import com.artworkspace.github.ui.viewmodel.FollowingViewModel
+import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 
 class FollowingFragment : Fragment() {
 
     private var _binding: FragmentFollowingBinding? = null
     private val binding get() = _binding!!
 
-    private val followingViewModel by viewModels<FollowingViewModel>()
+    private val followingViewModel by viewModels<FollowingViewModel> {
+        ViewModelFactory.getInstance(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,18 +31,20 @@ class FollowingFragment : Fragment() {
     ): View {
         _binding = FragmentFollowingBinding.inflate(layoutInflater, container, false)
 
-        followingViewModel.following.observe(viewLifecycleOwner) { following ->
-            if (following == null) {
-                val username = arguments?.getString(ARGS_USERNAME) ?: ""
-                followingViewModel.getUserFollowing(username)
-            } else {
-                showFollowing(following)
+        val username = arguments?.getString(ARGS_USERNAME) ?: ""
+        followingViewModel.getUserFollowing(username).observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> showLoading(true)
+                is Result.Error -> {
+                    showLoading(false)
+                }
+                is Result.Success -> {
+                    showFollowing(result.data)
+                    showLoading(false)
+                }
             }
         }
 
-        followingViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
 
         return binding.root
     }

@@ -10,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.SectionPagerAdapter
+import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.ui.viewmodel.DetailViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import com.artworkspace.github.utils.EspressoIdlingResource
 import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
 import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
@@ -28,7 +30,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private var username: String? = null
     private var profileUrl: String? = null
     private var userDetail: UserEntity? = null
-    private var isFavorite: Boolean = false
+    private var isFavorite: Boolean? = false
 
     private val detailViewModel by viewModels<DetailViewModel> {
         ViewModelFactory.getInstance(this)
@@ -44,31 +46,30 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         setViewPager()
         setToolbar(getString(R.string.profile))
 
-        detailViewModel.user.observe(this) { user ->
-            if (user != null) {
-                parseUserDetail(user)
+        detailViewModel.getUserDetail(username!!).observe(this) { result ->
+            when (result) {
+                is Result.Loading -> showLoading(true)
+                is Result.Error -> {
+                    Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+                    showLoading(false)
+                    errorOccurred()
+                }
+                is Result.Success -> {
+                    result.data.let {
+                        parseUserDetail(it)
 
-                val userEntity = UserEntity(
-                    user.login,
-                    user.avatarUrl,
-                    true
-                )
+                        val userEntity = UserEntity(
+                            it.login,
+                            it.avatarUrl,
+                            true
+                        )
 
-                userDetail = userEntity
-                profileUrl = user.htmlUrl
+                        userDetail = userEntity
+                        profileUrl = it.htmlUrl
+                    }
+                    showLoading(false)
+                }
             }
-        }
-
-        detailViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
-        detailViewModel.isError.observe(this) { error ->
-            if (error) errorOccurred()
-        }
-
-        detailViewModel.callCounter.observe(this) { counter ->
-            if (counter < 1) detailViewModel.getUserDetail(username!!)
         }
 
         detailViewModel.isFavoriteUser(username ?: "").observe(this) {
@@ -95,7 +96,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.fab_favorite -> {
-                if (isFavorite) {
+                if (isFavorite == true) {
                     userDetail?.let { detailViewModel.deleteFromFavorite(it) }
                     isFavoriteUser(false)
                     Toast.makeText(this, "User deleted from favorite", Toast.LENGTH_SHORT).show()
@@ -112,7 +113,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         _binding = null
         username = null
         profileUrl = null
-
+        isFavorite = null
         super.onDestroy()
     }
 
@@ -140,7 +141,6 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
             tabs.visibility = View.INVISIBLE
             viewPager.visibility = View.INVISIBLE
         }
-        Toast.makeText(this@DetailUserActivity, "An Error is Occurred", Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -189,6 +189,8 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 viewPager.visibility = View.INVISIBLE
                 fabFavorite.visibility = View.GONE
             }
+
+            EspressoIdlingResource.increment()
         } else {
             binding.apply {
                 pbLoading.visibility = View.GONE
@@ -196,6 +198,8 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 viewPager.visibility = View.VISIBLE
                 fabFavorite.visibility = View.VISIBLE
             }
+
+            EspressoIdlingResource.decrement()
         }
     }
 

@@ -18,10 +18,10 @@ interface ApiService {
      * @return Call<ResponseSearch>
      */
     @GET("search/users")
-    fun searchUsername(
+    suspend fun searchUsername(
         @Header("Authorization") token: String,
         @Query("q") q: String
-    ): Call<ResponseSearch>
+    ): ResponseSearch
 
 
     /**
@@ -32,10 +32,10 @@ interface ApiService {
      * @return Call<User>
      */
     @GET("users/{username}")
-    fun getUserDetail(
+    suspend fun getUserDetail(
         @Header("Authorization") token: String,
         @Path("username") username: String
-    ): Call<User>
+    ): User
 
 
     /**
@@ -46,10 +46,10 @@ interface ApiService {
      * @return Call<ArrayList<SimpleUser>>
      */
     @GET("users/{username}/followers")
-    fun getUserFollowers(
+    suspend fun getUserFollowers(
         @Header("Authorization") token: String,
         @Path("username") username: String
-    ): Call<ArrayList<SimpleUser>>
+    ): ArrayList<SimpleUser>
 
 
     /**
@@ -60,8 +60,8 @@ interface ApiService {
      * @return Call<ArrayList<SimpleUser>>
      */
     @GET("users/{username}/following")
-    fun getUserFollowing(
+    suspend fun getUserFollowing(
         @Header("Authorization") token: String,
         @Path("username") username: String
-    ): Call<ArrayList<SimpleUser>>
+    ): ArrayList<SimpleUser>
 }

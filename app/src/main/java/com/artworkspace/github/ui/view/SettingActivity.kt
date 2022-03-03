@@ -5,10 +5,15 @@ import android.widget.CompoundButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.artworkspace.github.R
 import com.artworkspace.github.databinding.ActivitySettingBinding
 import com.artworkspace.github.ui.viewmodel.SettingViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
 
@@ -26,11 +31,15 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         setContentView(binding.root)
         setToolbar(getString(R.string.setting))
 
-        settingViewModel.getThemeSetting().observe(this) { isDarkModeActive ->
-            if (isDarkModeActive) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-            binding.switchDarkMode.isChecked = isDarkModeActive
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    settingViewModel.themeSetting.collect { state ->
+                        if (state) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                }
+            }
         }
 
         binding.switchDarkMode.setOnCheckedChangeListener(this)

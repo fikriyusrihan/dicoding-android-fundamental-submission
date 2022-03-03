@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.artworkspace.github.data.UserRepository
 import com.artworkspace.github.di.Injection
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "application")
 
 class ViewModelFactory(private val userRepository: UserRepository) :
     ViewModelProvider.NewInstanceFactory() {
@@ -28,6 +28,12 @@ class ViewModelFactory(private val userRepository: UserRepository) :
             }
             modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
                 FavoriteViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(FollowersViewModel::class.java) -> {
+                FollowersViewModel(userRepository) as T
+            }
+            modelClass.isAssignableFrom(FollowingViewModel::class.java) -> {
+                FollowingViewModel(userRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
