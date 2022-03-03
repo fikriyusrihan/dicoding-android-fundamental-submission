@@ -100,7 +100,7 @@ class UserRepository private constructor(
      *
      * @return LiveData<List<UserEntity>>
      */
-    fun getAllFavoriteUsers(): LiveData<List<UserEntity>> = userDao.getAllUsers()
+    fun getAllFavoriteUsers(): Flow<List<UserEntity>> = userDao.getAllUsers()
 
     /**
      * Delete a favorite user from database
