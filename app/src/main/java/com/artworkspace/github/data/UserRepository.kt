@@ -11,6 +11,7 @@ import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class UserRepository private constructor(
     private val apiService: ApiService,
@@ -75,7 +76,18 @@ class UserRepository private constructor(
      *  @param id GitHub username
      *  @return LiveData<Result<User>>
      */
-    fun getUserDetail(id: String): LiveData<Result<User>> = liveData {
+//    fun getUserDetail(id: String): LiveData<Result<User>> = liveData {
+//        emit(Result.Loading)
+//        try {
+//            val user = apiService.getUserDetail(token = API_TOKEN, id)
+//            emit(Result.Success(user))
+//        } catch (e: Exception) {
+//            Log.d(TAG, "getUserDetail: ${e.message.toString()}")
+//            emit(Result.Error(e.message.toString()))
+//        }
+//    }
+
+    fun getUserDetail(id: String): Flow<Result<User>> = flow {
         emit(Result.Loading)
         try {
             val user = apiService.getUserDetail(token = API_TOKEN, id)
@@ -90,11 +102,9 @@ class UserRepository private constructor(
      * Determine this user is favorite or not
      *
      * @param id User id
-     * @return LiveData<Boolean>
+     * @return Flow<Boolean>
      */
-    fun isFavoriteUser(id: String): LiveData<Boolean> = liveData {
-        emit(userDao.isFavoriteUser(id))
-    }
+    fun isFavoriteUser(id: String): Flow<Boolean> = userDao.isFavoriteUser(id)
 
     /**
      * Get all favorite users from database
@@ -142,7 +152,7 @@ class UserRepository private constructor(
     /**
      * Get theme setting for dark mode state from DataStore
      *
-     * @return LiveData<Boolean>
+     * @return Flow<Boolean>
      */
     fun getThemeSetting(): Flow<Boolean> = preferences.getThemeSetting()
 

@@ -7,6 +7,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.SectionPagerAdapter
@@ -21,6 +24,8 @@ import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
 import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -46,35 +51,20 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         setViewPager()
         setToolbar(getString(R.string.profile))
 
-        detailViewModel.getUserDetail(username!!).observe(this) { result ->
-            when (result) {
-                is Result.Loading -> showLoading(true)
-                is Result.Error -> {
-                    Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
-                    showLoading(false)
-                    errorOccurred()
-                }
-                is Result.Success -> {
-                    result.data.let {
-                        parseUserDetail(it)
-
-                        val userEntity = UserEntity(
-                            it.login,
-                            it.avatarUrl,
-                            true
-                        )
-
-                        userDetail = userEntity
-                        profileUrl = it.htmlUrl
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    detailViewModel.getUserDetail(username ?: "").collect { result ->
+                        onDetailUserReceived(result)
                     }
-                    showLoading(false)
+                }
+                launch {
+                    detailViewModel.isFavoriteUser(username ?: "").collect { state ->
+                        isFavoriteUser(state)
+                        isFavorite = state
+                    }
                 }
             }
-        }
-
-        detailViewModel.isFavoriteUser(username ?: "").observe(this) {
-            isFavoriteUser(it)
-            isFavorite = it
         }
 
         binding.btnOpen.setOnClickListener(this)
@@ -115,6 +105,38 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         profileUrl = null
         isFavorite = null
         super.onDestroy()
+    }
+
+    /**
+     * Parsing data to UI based on result
+     *
+     * @param result Result from API
+     */
+    private fun onDetailUserReceived(result: Result<User>) {
+        when (result) {
+            is Result.Loading -> showLoading(true)
+            is Result.Error -> {
+                errorOccurred()
+                showLoading(false)
+                Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show()
+            }
+            is Result.Success -> {
+                result.data.let { user ->
+                    parseUserDetail(user)
+
+                    val userEntity = UserEntity(
+                        user.login,
+                        user.avatarUrl,
+                        true
+                    )
+
+                    userDetail = userEntity
+                    profileUrl = user.htmlUrl
+                }
+
+                showLoading(false)
+            }
+        }
     }
 
     /**

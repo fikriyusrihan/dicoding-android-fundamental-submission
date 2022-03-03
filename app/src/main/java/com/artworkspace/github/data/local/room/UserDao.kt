@@ -3,6 +3,7 @@ package com.artworkspace.github.data.local.room
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.artworkspace.github.data.local.entity.UserEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -19,5 +20,5 @@ interface UserDao {
     fun getAllUsers(): LiveData<List<UserEntity>>
 
     @Query("SELECT EXISTS(SELECT * FROM user WHERE id = :id AND is_favorite = 1)")
-    suspend fun isFavoriteUser(id: String): Boolean
+    fun isFavoriteUser(id: String): Flow<Boolean>
 }

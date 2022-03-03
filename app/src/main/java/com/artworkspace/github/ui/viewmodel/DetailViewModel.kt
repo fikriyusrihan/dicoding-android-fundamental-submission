@@ -1,10 +1,15 @@
 package com.artworkspace.github.ui.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.UserRepository
 import com.artworkspace.github.data.local.entity.UserEntity
+import com.artworkspace.github.data.remote.response.User
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val repository: UserRepository) : ViewModel() {
@@ -37,7 +42,7 @@ class DetailViewModel(private val repository: UserRepository) : ViewModel() {
      * @param id User id
      * @return LiveData<Boolean>
      */
-    fun isFavoriteUser(id: String): LiveData<Boolean> = repository.isFavoriteUser(id)
+    fun isFavoriteUser(id: String): Flow<Boolean> = repository.isFavoriteUser(id)
 
     /**
      *  Get user detail information
@@ -45,5 +50,12 @@ class DetailViewModel(private val repository: UserRepository) : ViewModel() {
      *  @param username GitHub username
      *  @return LiveData<Result<User>>
      */
-    fun getUserDetail(username: String) = repository.getUserDetail(username)
+    fun getUserDetail(username: String): StateFlow<Result<User>> =
+        repository.getUserDetail(username).stateIn(
+            initialValue = Result.Loading,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
+
 }
