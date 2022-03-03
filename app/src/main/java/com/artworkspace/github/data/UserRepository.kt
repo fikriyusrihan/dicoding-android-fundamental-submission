@@ -59,7 +59,7 @@ class UserRepository private constructor(
      *  @param id GitHub username
      *  @return LiveData<Result<ArrayList<SimpleUser>>>
      */
-    fun getUserFollowers(id: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
+    fun getUserFollowers(id: String): Flow<Result<ArrayList<SimpleUser>>> = flow {
         emit(Result.Loading)
         try {
             val users = apiService.getUserFollowers(token = API_TOKEN, id)
