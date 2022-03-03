@@ -32,3 +32,11 @@
 * Screenshot of the application
 <img src="https://github.com/fikriyusrihan/fikriyusrihan/blob/main/Assets/android_fundamental_submission_readme/android_submission_2.png"/>
 
+## Submission 3: GitHub User App
+* Rating: ⭐⭐⭐⭐⭐
+* There are some Android components that I implement in this submission project:
+    * Room
+    * DataStore
+    * Espresso
+* What I learned from this submission:
+    * How to implement Repository Pattern with Kotlin Flow
