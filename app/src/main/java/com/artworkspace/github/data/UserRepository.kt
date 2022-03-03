@@ -76,17 +76,6 @@ class UserRepository private constructor(
      *  @param id GitHub username
      *  @return LiveData<Result<User>>
      */
-//    fun getUserDetail(id: String): LiveData<Result<User>> = liveData {
-//        emit(Result.Loading)
-//        try {
-//            val user = apiService.getUserDetail(token = API_TOKEN, id)
-//            emit(Result.Success(user))
-//        } catch (e: Exception) {
-//            Log.d(TAG, "getUserDetail: ${e.message.toString()}")
-//            emit(Result.Error(e.message.toString()))
-//        }
-//    }
-
     fun getUserDetail(id: String): Flow<Result<User>> = flow {
         emit(Result.Loading)
         try {

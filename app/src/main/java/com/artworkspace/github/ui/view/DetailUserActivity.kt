@@ -19,7 +19,6 @@ import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.ui.viewmodel.DetailViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
-import com.artworkspace.github.utils.EspressoIdlingResource
 import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
 import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
@@ -37,7 +36,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private var userDetail: UserEntity? = null
     private var isFavorite: Boolean? = false
 
-    private val detailViewModel by viewModels<DetailViewModel> {
+    private val detailViewModel: DetailViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
 
@@ -54,7 +53,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    detailViewModel.getUserDetail(username ?: "").collect { result ->
+                    detailViewModel.userDetail.collect { result ->
                         onDetailUserReceived(result)
                     }
                 }
@@ -62,6 +61,11 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                     detailViewModel.isFavoriteUser(username ?: "").collect { state ->
                         isFavoriteUser(state)
                         isFavorite = state
+                    }
+                }
+                launch {
+                    detailViewModel.isLoaded.collect { loaded ->
+                        if (!loaded) detailViewModel.getDetailUser(username ?: "")
                     }
                 }
             }
@@ -211,8 +215,6 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 viewPager.visibility = View.INVISIBLE
                 fabFavorite.visibility = View.GONE
             }
-
-            EspressoIdlingResource.increment()
         } else {
             binding.apply {
                 pbLoading.visibility = View.GONE
@@ -220,8 +222,6 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 viewPager.visibility = View.VISIBLE
                 fabFavorite.visibility = View.VISIBLE
             }
-
-            EspressoIdlingResource.decrement()
         }
     }
 

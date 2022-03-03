@@ -7,12 +7,35 @@ import com.artworkspace.github.data.UserRepository
 import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.User
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val repository: UserRepository) : ViewModel() {
+
+    private val _userDetail = MutableStateFlow<Result<User>>(Result.Loading)
+    val userDetail = _userDetail.asStateFlow()
+
+    private val _isLoaded = MutableStateFlow(false)
+    val isLoaded = _isLoaded.asStateFlow()
+
+    /**
+     *  Get user detail information
+     *
+     *  @param username GitHub username
+     *  @return Unit
+     */
+    fun getDetailUser(username: String) {
+        _userDetail.value = Result.Loading
+        viewModelScope.launch {
+            repository.getUserDetail(username).collect {
+                _userDetail.value = it
+            }
+        }
+
+        _isLoaded.value = true
+    }
 
     /**
      * Save user to database as favorite user
@@ -43,19 +66,4 @@ class DetailViewModel(private val repository: UserRepository) : ViewModel() {
      * @return LiveData<Boolean>
      */
     fun isFavoriteUser(id: String): Flow<Boolean> = repository.isFavoriteUser(id)
-
-    /**
-     *  Get user detail information
-     *
-     *  @param username GitHub username
-     *  @return LiveData<Result<User>>
-     */
-    fun getUserDetail(username: String): StateFlow<Result<User>> =
-        repository.getUserDetail(username).stateIn(
-            initialValue = Result.Loading,
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
-
-
 }
