@@ -4,34 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class AppPreferences private constructor(private val dataStore: DataStore<Preferences>) {
-
-    /**
-     * Get last search query from DataStore
-     *
-     * @return Flow<String>
-     */
-    fun getLastSearchQuery(): Flow<String> {
-        return dataStore.data.map { preferences ->
-            preferences[QUERY_KEY] ?: "\"\""
-        }
-    }
-
-    /**
-     * Save last search query to DataStore
-     *
-     * @param query Last search query
-     */
-    suspend fun saveLastSearchQuery(query: String) {
-        dataStore.edit { preferences ->
-            preferences[QUERY_KEY] = query
-        }
-    }
-
     /**
      * Get theme setting for dark mode state from DataStore
      *
@@ -56,7 +32,6 @@ class AppPreferences private constructor(private val dataStore: DataStore<Prefer
 
     companion object {
         private val THEME_KEY = booleanPreferencesKey("theme_setting")
-        private val QUERY_KEY = stringPreferencesKey("query_search")
 
         @Volatile
         private var INSTANCE: AppPreferences? = null

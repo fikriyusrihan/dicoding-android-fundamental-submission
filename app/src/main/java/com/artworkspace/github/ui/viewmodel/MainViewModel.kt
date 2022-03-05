@@ -1,32 +1,25 @@
 package com.artworkspace.github.ui.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.UserRepository
+import com.artworkspace.github.data.remote.response.SimpleUser
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     val themeSetting: Flow<Boolean> = repository.getThemeSetting()
 
-    /**
-     * Get last search query in search view
-     *
-     * @return LiveData<String>
-     */
-    fun getLastSearchQuery(): LiveData<String> = repository.getLastSearchQuery()
+    private val _users = MutableStateFlow<Result<ArrayList<SimpleUser>>>(Result.Loading)
+    val users = _users.asStateFlow()
 
-    /**
-     * Saving last search query in search view
-     *
-     * @param query Search query
-     */
-    fun saveLastSearchQuery(query: String) {
-        viewModelScope.launch {
-            repository.saveLastSearchQuery(query)
-        }
+    init {
+        searchUserByUsername("\"\"")
     }
 
     /**
@@ -35,5 +28,12 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
      * @param query GitHub username
      * @return LiveData<Result<ArrayList<SimpleUser>
      */
-    fun searchUserByUsername(query: String) = repository.searchUserByUsername(query)
+    fun searchUserByUsername(query: String) {
+        _users.value = Result.Loading
+        viewModelScope.launch {
+            repository.searchUserByUsername(query).collect {
+                _users.value = it
+            }
+        }
+    }
 }

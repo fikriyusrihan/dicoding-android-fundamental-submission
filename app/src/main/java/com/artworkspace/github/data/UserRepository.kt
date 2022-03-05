@@ -1,9 +1,6 @@
 package com.artworkspace.github.data
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.liveData
 import com.artworkspace.github.BuildConfig
 import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.local.room.UserDao
@@ -25,7 +22,7 @@ class UserRepository private constructor(
      * @param q GitHub username query
      * @return LiveData<Result<ArrayList<SimpleUser>>>
      */
-    fun searchUserByUsername(q: String): LiveData<Result<ArrayList<SimpleUser>>> = liveData {
+    fun searchUserByUsername(q: String): Flow<Result<ArrayList<SimpleUser>>> = flow {
         emit(Result.Loading)
         try {
             val users = apiService.searchUsername(token = API_TOKEN, q).items
@@ -118,24 +115,6 @@ class UserRepository private constructor(
      */
     suspend fun saveUserAsFavorite(user: UserEntity) {
         userDao.insert(user)
-    }
-
-    /**
-     * Get last search query from DataStore
-     *
-     * @return LiveData<String>
-     */
-    fun getLastSearchQuery(): LiveData<String> {
-        return preferences.getLastSearchQuery().asLiveData()
-    }
-
-    /**
-     * Saving last search query to DataStore
-     *
-     * @param query Search query
-     */
-    suspend fun saveLastSearchQuery(query: String) {
-        preferences.saveLastSearchQuery(query)
     }
 
     /**
