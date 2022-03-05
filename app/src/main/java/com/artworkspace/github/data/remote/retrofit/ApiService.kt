@@ -3,7 +3,6 @@ package com.artworkspace.github.data.remote.retrofit
 import com.artworkspace.github.data.remote.response.ResponseSearch
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.data.remote.response.User
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path

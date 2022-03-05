@@ -2,8 +2,10 @@ package com.artworkspace.github.ui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artworkspace.github.R
 import com.artworkspace.github.adapter.ListUserAdapter
@@ -13,6 +15,8 @@ import com.artworkspace.github.databinding.ActivityFavoriteBinding
 import com.artworkspace.github.ui.viewmodel.FavoriteViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 import com.artworkspace.github.utils.EspressoIdlingResource
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 class FavoriteActivity : AppCompatActivity() {
@@ -29,15 +33,26 @@ class FavoriteActivity : AppCompatActivity() {
         setContentView(binding.root)
         setToolbar(getString(R.string.favorite))
 
-        favoriteViewModel.getFavoriteUsers().observe(this) { users ->
-            EspressoIdlingResource.increment()
-            showFavoriteUsers(users)
+        lifecycleScope.launchWhenStarted {
+            launch {
+                favoriteViewModel.favorite.collect {
+                    if (it.isNotEmpty()) showFavoriteUsers(it)
+                    else showMessage()
+
+                    EspressoIdlingResource.increment()
+                }
+            }
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    private fun showMessage() {
+        binding.tvMessage.visibility = View.VISIBLE
+        binding.rvFavorite.visibility = View.GONE
     }
 
     /**
@@ -63,8 +78,11 @@ class FavoriteActivity : AppCompatActivity() {
         binding.rvFavorite.apply {
             layoutManager = LinearLayoutManager(this@FavoriteActivity)
             adapter = listUserAdapter
+            visibility = View.VISIBLE
             setHasFixedSize(true)
         }
+
+        binding.tvMessage.visibility = View.GONE
 
         listUserAdapter.setOnItemClickCallback(object :
             ListUserAdapter.OnItemClickCallback {

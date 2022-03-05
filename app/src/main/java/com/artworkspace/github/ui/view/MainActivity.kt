@@ -24,7 +24,6 @@ import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.ui.viewmodel.MainViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
-import com.artworkspace.github.utils.EspressoIdlingResource
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -46,16 +45,17 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarHome)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        mainViewModel.getLastSearchQuery().observe(this) {
-            searchUser(it)
-        }
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     mainViewModel.themeSetting.collect { state ->
                         if (state) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                }
+                launch {
+                    mainViewModel.users.collect { result ->
+                        showSearchingResult(result)
                     }
                 }
             }
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             queryHint = getString(R.string.github_username)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    searchUser(query ?: "")
+                    mainViewModel.searchUserByUsername(query ?: "")
                     clearFocus()
                     return true
                 }
@@ -111,30 +111,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Search user by username, this function will save the query first and then doing user search
-     *
-     * @param query Username
-     */
-    private fun searchUser(query: String) {
-        EspressoIdlingResource.increment()
-
-        mainViewModel.saveLastSearchQuery(query)
-        mainViewModel.searchUserByUsername(query).observe(this) { result ->
-            when (result) {
-                is Result.Loading -> showLoading(true)
-                is Result.Error -> {
-                    errorOccurred()
-                    showLoading(false)
-                }
-                is Result.Success -> {
-                    showSearchingResult(result.data)
-                    showLoading(false)
-                }
-            }
-        }
-    }
-
-    /**
      * Setting UI when an error occurred
      *
      * @return Unit
@@ -162,29 +138,37 @@ class MainActivity : AppCompatActivity() {
     /**
      * Showing up result, setup layout manager, adapter, and onClickItemCallback
      *
-     * @param user List of Users
+     * @param result Result from viewmodel
      * @return Unit
      */
-    private fun showSearchingResult(user: ArrayList<SimpleUser>) {
-        binding.tvResultCount.text = getString(R.string.showing_results, user.size)
-
-        val listUserAdapter = ListUserAdapter(user)
-
-        binding.rvUsers.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = listUserAdapter
-            setHasFixedSize(true)
-        }
-
-        listUserAdapter.setOnItemClickCallback(object :
-            ListUserAdapter.OnItemClickCallback {
-            override fun onItemClicked(user: SimpleUser) {
-                goToDetailUser(user)
+    private fun showSearchingResult(result: Result<ArrayList<SimpleUser>>) {
+        when (result) {
+            is Result.Loading -> showLoading(true)
+            is Result.Error -> {
+                errorOccurred()
+                showLoading(false)
             }
+            is Result.Success -> {
+                binding.tvResultCount.text = getString(R.string.showing_results, result.data.size)
+                val listUserAdapter = ListUserAdapter(result.data)
 
-        })
+                binding.rvUsers.apply {
+                    layoutManager = LinearLayoutManager(this@MainActivity)
+                    adapter = listUserAdapter
+                    setHasFixedSize(true)
+                }
 
-        EspressoIdlingResource.decrement()
+                listUserAdapter.setOnItemClickCallback(object :
+                    ListUserAdapter.OnItemClickCallback {
+                    override fun onItemClicked(user: SimpleUser) {
+                        goToDetailUser(user)
+                    }
+
+                })
+
+                showLoading(false)
+            }
+        }
     }
 
     /**

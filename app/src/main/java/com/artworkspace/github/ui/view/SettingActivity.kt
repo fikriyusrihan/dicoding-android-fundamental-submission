@@ -34,9 +34,11 @@ class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListe
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    settingViewModel.themeSetting.collect { state ->
+                    settingViewModel.getThemeSetting.collect { state ->
                         if (state) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+                        binding.switchDarkMode.isChecked = state
                     }
                 }
             }
