@@ -18,7 +18,6 @@ import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.ui.viewmodel.DetailViewModel
-import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
 import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout

@@ -1,4 +1,4 @@
-package com.artworkspace.github.data.local
+package com.artworkspace.github.di
 
 import android.content.Context
 import androidx.room.Room

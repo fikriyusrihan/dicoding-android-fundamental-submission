@@ -11,7 +11,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.artworkspace.github.R
 import com.artworkspace.github.databinding.ActivitySettingBinding
 import com.artworkspace.github.ui.viewmodel.SettingViewModel
-import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

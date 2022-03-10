@@ -1,4 +1,4 @@
-package com.artworkspace.github.data.remote
+package com.artworkspace.github.di
 
 import com.artworkspace.github.data.remote.retrofit.ApiConfig
 import com.artworkspace.github.data.remote.retrofit.ApiService
