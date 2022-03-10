@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
             queryHint = getString(R.string.github_username)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
+                    EspressoIdlingResource.increment()
                     mainViewModel.searchUserByUsername(query ?: "")
                     clearFocus()
                     return true
