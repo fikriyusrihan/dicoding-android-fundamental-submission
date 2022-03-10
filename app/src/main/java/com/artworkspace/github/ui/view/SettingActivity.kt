@@ -12,17 +12,17 @@ import com.artworkspace.github.R
 import com.artworkspace.github.databinding.ActivitySettingBinding
 import com.artworkspace.github.ui.viewmodel.SettingViewModel
 import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SettingActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
 
     private var _binding: ActivitySettingBinding? = null
     private val binding get() = _binding!!
 
-    private val settingViewModel: SettingViewModel by viewModels {
-        ViewModelFactory.getInstance(this)
-    }
+    private val settingViewModel: SettingViewModel by viewModels ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
