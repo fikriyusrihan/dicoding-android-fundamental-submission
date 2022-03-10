@@ -33,16 +33,5 @@ class AppPreferences @Inject constructor(private val dataStore: DataStore<Prefer
 
     companion object {
         private val THEME_KEY = booleanPreferencesKey("theme_setting")
-
-        @Volatile
-        private var INSTANCE: AppPreferences? = null
-
-        fun getInstance(dataStore: DataStore<Preferences>): AppPreferences {
-            return INSTANCE ?: synchronized(this) {
-                AppPreferences(dataStore).also {
-                    INSTANCE = it
-                }
-            }
-        }
     }
 }

@@ -19,13 +19,11 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class DataStoreModule {
 
     @Provides
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return context.dataStore
-    }
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        context.dataStore
 
     @Provides
     @Singleton
-    fun provideAppPreferences(dataStore: DataStore<Preferences>): AppPreferences {
-        return AppPreferences(dataStore)
-    }
+    fun provideAppPreferences(dataStore: DataStore<Preferences>): AppPreferences =
+        AppPreferences(dataStore)
 }

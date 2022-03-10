@@ -16,9 +16,7 @@ import javax.inject.Singleton
 class DatabaseModule {
 
     @Provides
-    fun provideUserDao(userDatabase: UserDatabase): UserDao {
-        return userDatabase.userDao()
-    }
+    fun provideUserDao(userDatabase: UserDatabase): UserDao = userDatabase.userDao()
 
     @Provides
     @Singleton

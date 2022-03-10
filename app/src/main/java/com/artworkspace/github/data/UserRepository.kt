@@ -10,13 +10,10 @@ import com.artworkspace.github.data.remote.retrofit.ApiService
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-@Module
-@InstallIn(ActivityRetainedComponent::class)
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
     private val userDao: UserDao,
@@ -143,19 +140,5 @@ class UserRepository @Inject constructor(
     companion object {
         private const val API_TOKEN = "Bearer ${BuildConfig.API_KEY}"
         private val TAG = UserRepository::class.java.simpleName
-
-        private var INSTANCE: UserRepository? = null
-
-        fun getInstance(
-            apiService: ApiService,
-            userDao: UserDao,
-            preferences: AppPreferences
-        ): UserRepository {
-            return INSTANCE ?: synchronized(this) {
-                UserRepository(apiService, userDao, preferences).also {
-                    INSTANCE = it
-                }
-            }
-        }
     }
 }
