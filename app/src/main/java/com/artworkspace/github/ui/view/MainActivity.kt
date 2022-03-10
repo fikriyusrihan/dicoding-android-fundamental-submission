@@ -23,6 +23,7 @@ import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.ui.viewmodel.MainViewModel
+import com.artworkspace.github.utils.EspressoIdlingResource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -59,7 +60,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    override fun onStart() {
+        super.onStart()
+        EspressoIdlingResource.increment()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -164,8 +169,8 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 })
-
                 showLoading(false)
+                EspressoIdlingResource.decrement()
             }
         }
     }

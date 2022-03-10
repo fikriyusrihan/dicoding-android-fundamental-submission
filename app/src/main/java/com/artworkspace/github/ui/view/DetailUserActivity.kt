@@ -18,6 +18,7 @@ import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.ui.viewmodel.DetailViewModel
+import com.artworkspace.github.utils.EspressoIdlingResource
 import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
 import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
@@ -72,6 +73,11 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
         binding.btnOpen.setOnClickListener(this)
         binding.fabFavorite.setOnClickListener(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EspressoIdlingResource.increment()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -138,6 +144,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
                 showLoading(false)
+                EspressoIdlingResource.decrement()
             }
         }
     }

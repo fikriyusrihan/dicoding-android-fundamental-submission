@@ -72,4 +72,20 @@ class MainActivityTest {
         onView(withId(R.id.favorite)).perform(click())
         onView(withId(R.id.rv_favorite)).check(matches(isDisplayed()))
     }
+
+    @Test
+    fun testDeleteUserFromFavorite() {
+        onView(withId(R.id.favorite)).check(matches(isDisplayed()))
+        onView(withId(R.id.favorite)).perform(click())
+
+        onView(withId(R.id.rv_favorite)).perform(
+            actionOnItemAtPosition<ListUserAdapter.ListViewHolder>(0, click())
+        )
+
+        onView(withId(R.id.user_detail_container)).check(matches(isDisplayed()))
+        onView(withId(R.id.tabs)).check(matches(isDisplayed()))
+        onView(withId(R.id.fab_favorite)).check(matches(isDisplayed()))
+        onView(withId(R.id.fab_favorite)).perform(click())
+        pressBack()
+    }
 }
