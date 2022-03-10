@@ -7,10 +7,17 @@ import com.artworkspace.github.data.local.room.UserDao
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.data.remote.retrofit.ApiService
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class UserRepository private constructor(
+@Module
+@InstallIn(ActivityRetainedComponent::class)
+class UserRepository @Inject constructor(
     private val apiService: ApiService,
     private val userDao: UserDao,
     private val preferences: AppPreferences

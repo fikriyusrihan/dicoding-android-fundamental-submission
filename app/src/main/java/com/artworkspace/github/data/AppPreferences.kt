@@ -1,13 +1,25 @@
 package com.artworkspace.github.data
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AppPreferences private constructor(private val dataStore: DataStore<Preferences>) {
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "application")
+
+class AppPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
     /**
      * Get theme setting for dark mode state from DataStore
      *
@@ -43,5 +55,21 @@ class AppPreferences private constructor(private val dataStore: DataStore<Prefer
                 }
             }
         }
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+class PreferencesModule {
+
+    @Provides
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return context.dataStore
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppPreferences(dataStore: DataStore<Preferences>): AppPreferences {
+        return AppPreferences(dataStore)
     }
 }
