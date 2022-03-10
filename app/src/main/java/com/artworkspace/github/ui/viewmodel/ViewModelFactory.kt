@@ -20,9 +20,6 @@ class ViewModelFactory(private val userRepository: UserRepository) :
             modelClass.isAssignableFrom(SettingViewModel::class.java) -> {
                 SettingViewModel(userRepository) as T
             }
-            modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
-                DetailViewModel(userRepository) as T
-            }
             modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
                 FavoriteViewModel(userRepository) as T
             }
