@@ -13,18 +13,16 @@ import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityFavoriteBinding
 import com.artworkspace.github.ui.viewmodel.FavoriteViewModel
-import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 import com.artworkspace.github.utils.EspressoIdlingResource
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class FavoriteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFavoriteBinding
-    private val favoriteViewModel: FavoriteViewModel by viewModels {
-        ViewModelFactory.getInstance(this)
-    }
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

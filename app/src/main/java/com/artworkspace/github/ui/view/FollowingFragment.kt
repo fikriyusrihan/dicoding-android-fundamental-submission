@@ -15,18 +15,17 @@ import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.FragmentFollowingBinding
 import com.artworkspace.github.ui.viewmodel.FollowingViewModel
-import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class FollowingFragment : Fragment() {
 
     private var _binding: FragmentFollowingBinding? = null
     private val binding get() = _binding!!
 
-    private val followingViewModel by viewModels<FollowingViewModel> {
-        ViewModelFactory.getInstance(requireContext())
-    }
+    private val followingViewModel: FollowingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

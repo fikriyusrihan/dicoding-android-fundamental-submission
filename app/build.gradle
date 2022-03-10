@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -59,6 +60,10 @@ dependencies {
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    // Hilt
+    implementation 'com.google.dagger:hilt-android:2.41'
+    kapt 'com.google.dagger:hilt-compiler:2.41'
+
     // Room
     implementation 'androidx.room:room-runtime:2.4.2'
     implementation "androidx.room:room-ktx:2.4.2"
@@ -92,4 +97,8 @@ dependencies {
 
     // LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+}
+
+kapt {
+    correctErrorTypes true
 }

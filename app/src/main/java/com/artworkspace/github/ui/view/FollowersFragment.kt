@@ -15,18 +15,17 @@ import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.FragmentFollowersBinding
 import com.artworkspace.github.ui.viewmodel.FollowersViewModel
-import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class FollowersFragment : Fragment() {
 
     private var _binding: FragmentFollowersBinding? = null
     private val binding get() = _binding!!
 
-    private val followersViewModel by viewModels<FollowersViewModel> {
-        ViewModelFactory.getInstance(requireContext())
-    }
+    private val followersViewModel: FollowersViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

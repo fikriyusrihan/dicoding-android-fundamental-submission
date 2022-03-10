@@ -23,18 +23,17 @@ import com.artworkspace.github.data.remote.response.SimpleUser
 import com.artworkspace.github.databinding.ActivityMainBinding
 import com.artworkspace.github.ui.view.DetailUserActivity.Companion.EXTRA_DETAIL
 import com.artworkspace.github.ui.viewmodel.MainViewModel
-import com.artworkspace.github.ui.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    private val mainViewModel: MainViewModel by viewModels {
-        ViewModelFactory.getInstance(this)
-    }
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

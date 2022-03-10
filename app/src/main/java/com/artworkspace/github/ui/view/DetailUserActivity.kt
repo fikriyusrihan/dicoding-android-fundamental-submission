@@ -18,14 +18,15 @@ import com.artworkspace.github.data.local.entity.UserEntity
 import com.artworkspace.github.data.remote.response.User
 import com.artworkspace.github.databinding.ActivityDetailUserBinding
 import com.artworkspace.github.ui.viewmodel.DetailViewModel
-import com.artworkspace.github.ui.viewmodel.ViewModelFactory
 import com.artworkspace.github.utils.UIHelper.Companion.setAndVisible
 import com.artworkspace.github.utils.UIHelper.Companion.setImageGlide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
 
     private var _binding: ActivityDetailUserBinding? = null
@@ -36,9 +37,7 @@ class DetailUserActivity : AppCompatActivity(), View.OnClickListener {
     private var userDetail: UserEntity? = null
     private var isFavorite: Boolean? = false
 
-    private val detailViewModel: DetailViewModel by viewModels {
-        ViewModelFactory.getInstance(this)
-    }
+    private val detailViewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

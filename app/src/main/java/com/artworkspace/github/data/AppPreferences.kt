@@ -6,8 +6,9 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class AppPreferences private constructor(private val dataStore: DataStore<Preferences>) {
+class AppPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
     /**
      * Get theme setting for dark mode state from DataStore
      *
@@ -32,16 +33,5 @@ class AppPreferences private constructor(private val dataStore: DataStore<Prefer
 
     companion object {
         private val THEME_KEY = booleanPreferencesKey("theme_setting")
-
-        @Volatile
-        private var INSTANCE: AppPreferences? = null
-
-        fun getInstance(dataStore: DataStore<Preferences>): AppPreferences {
-            return INSTANCE ?: synchronized(this) {
-                AppPreferences(dataStore).also {
-                    INSTANCE = it
-                }
-            }
-        }
     }
 }

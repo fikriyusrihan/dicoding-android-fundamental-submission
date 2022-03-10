@@ -5,13 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.artworkspace.github.data.Result
 import com.artworkspace.github.data.UserRepository
 import com.artworkspace.github.data.remote.response.SimpleUser
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FollowingViewModel(private val repository: UserRepository) : ViewModel() {
+@HiltViewModel
+class FollowingViewModel @Inject constructor(private val repository: UserRepository) : ViewModel() {
 
     private val _isLoaded = MutableStateFlow(false)
     val isLoaded = _isLoaded.asStateFlow()
