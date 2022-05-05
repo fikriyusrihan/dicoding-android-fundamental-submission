@@ -34,10 +34,9 @@ class FavoriteActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted {
             launch {
                 favoriteViewModel.favorite.collect {
+                    EspressoIdlingResource.increment()
                     if (it.isNotEmpty()) showFavoriteUsers(it)
                     else showMessage()
-
-                    EspressoIdlingResource.increment()
                 }
             }
         }
@@ -51,6 +50,8 @@ class FavoriteActivity : AppCompatActivity() {
     private fun showMessage() {
         binding.tvMessage.visibility = View.VISIBLE
         binding.rvFavorite.visibility = View.GONE
+
+        EspressoIdlingResource.decrement()
     }
 
     /**
@@ -87,7 +88,6 @@ class FavoriteActivity : AppCompatActivity() {
             override fun onItemClicked(user: SimpleUser) {
                 goToDetailUser(user)
             }
-
         })
 
         EspressoIdlingResource.decrement()

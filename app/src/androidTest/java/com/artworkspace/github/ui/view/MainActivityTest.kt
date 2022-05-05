@@ -1,10 +1,12 @@
 package com.artworkspace.github.ui.view
 
+import android.content.res.Resources
+import android.view.KeyEvent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -71,5 +73,45 @@ class MainActivityTest {
 
         onView(withId(R.id.favorite)).perform(click())
         onView(withId(R.id.rv_favorite)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testDeleteUserFromFavorite() {
+        onView(withId(R.id.favorite)).check(matches(isDisplayed()))
+        onView(withId(R.id.favorite)).perform(click())
+
+        onView(withId(R.id.rv_favorite)).perform(
+            actionOnItemAtPosition<ListUserAdapter.ListViewHolder>(0, click())
+        )
+
+        onView(withId(R.id.user_detail_container)).check(matches(isDisplayed()))
+        onView(withId(R.id.tabs)).check(matches(isDisplayed()))
+        onView(withId(R.id.fab_favorite)).check(matches(isDisplayed()))
+        onView(withId(R.id.fab_favorite)).perform(click())
+        pressBack()
+    }
+
+    @Test
+    fun testSearchUserFound() {
+        onView(withId(R.id.search)).check(matches(isDisplayed()))
+        onView(withId(R.id.search)).perform(click())
+
+        onView(
+            withId(androidx.appcompat.R.id.search_src_text)
+        ).perform(
+            clearText(), typeText("fikriyusrihan")
+        ).perform(pressKey(KeyEvent.KEYCODE_ENTER))
+
+        onView(withId(R.id.rv_users)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_users)).perform(
+            actionOnItemAtPosition<ListUserAdapter.ListViewHolder>(
+                0,
+                click()
+            )
+        )
+
+        onView(withId(R.id.user_detail_container)).check(matches(isDisplayed()))
+        onView(withId(R.id.tabs)).check(matches(isDisplayed()))
+        onView(withId(R.id.fab_favorite)).check(matches(isDisplayed()))
     }
 }
