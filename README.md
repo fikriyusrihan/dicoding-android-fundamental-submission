@@ -1,6 +1,9 @@
 # Bangkit 2022: Android Fundamental Submission 📱
 <p>This is a repository that contains the source code of my submissions project at Dicoding "Belajar Fundamental Aplikasi Android" course, start from the first submission until the final submission. This course is a part of self-paced learning at Bangkit 2022 Mobile Development learning path. I try to implement the best practices of the Kotlin programming language and Android framework to this project.</p>
 
+## Disclaimer ⚠️
+This repository is created for sharing and educational purposes only. Plagiarism is unacceptable and is not my responsibility as the author.
+
 ## Submission 1: GitHub User App
 * Rating: ⭐⭐⭐⭐⭐
 * There are some Android components that I implement in this submission project:
